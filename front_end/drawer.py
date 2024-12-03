@@ -4,24 +4,33 @@ from flet import (NavigationDrawer, NavigationDrawerDestination, Container, Icon
 
 class NavegationDrawer:
 
-    def criar_drawer(self):
-
+    def __init__(self) -> None:
         from front_exe import Pagina
 
-        Pagina.PAGE.drawer = NavigationDrawer(
+        self.pagedrawer = Pagina.PAGE
 
+    def criar_drawer(self):
+        def ativar_index_janela(e):
+
+            print(e.control.selected_index)
+
+        ###############################################
+        self.pagedrawer.drawer = NavigationDrawer(
+
+
+            on_change=ativar_index_janela,
             controls=[
                 Container(height=12),
                 NavigationDrawerDestination(
-                    label="Item 1",
-                    icon=Icons.DOOR_BACK_DOOR_OUTLINED,
-                    selected_icon=Icon(Icons.DOOR_BACK_DOOR),
+                    label="CONFIGURAÇÕES",
+                    icon=Icons.SETTINGS_OUTLINED,
+                    selected_icon=Icon(Icons.SETTINGS_SUGGEST_ROUNDED),
                 ),
                 Divider(thickness=2),
                 NavigationDrawerDestination(
-                    icon=Icon(Icons.MAIL_OUTLINED),
-                    label="Item 2",
-                    selected_icon=Icons.MAIL,
+                    icon=Icon(Icons.HOME_WORK_OUTLINED),
+                    label="HOME",
+                    selected_icon=Icons.HOME_WORK,
                 ),
                 NavigationDrawerDestination(
                     icon=Icon(Icons.PHONE_OUTLINED),
@@ -31,4 +40,10 @@ class NavegationDrawer:
             ],
         )
 
-        Pagina.PAGE.drawer.open = False
+    def desativar_drawer(self):
+
+        self.pagedrawer.drawer.open = False
+
+    def ativar_drawer(self):
+
+        self.pagedrawer.drawer.open = True

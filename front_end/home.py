@@ -4,15 +4,29 @@ import flet as ft
 
 class Home:
 
-    def criar_appbar(self):
+    def __init__(self) -> None:
 
         from front_exe import Pagina
 
-        Pagina.PAGE.appbar = AppBar(
+        self.pagehome = Pagina.PAGE
+
+    def criar_appbar(self):
+
+        def ativar_drawer(e):
+
+            from front_end.drawer import NavegationDrawer
+
+            nd = NavegationDrawer()
+            nd.ativar_drawer()
+
+            self.pagehome.update()
+
+        ######################################
+        self.pagehome.appbar = AppBar(
 
             leading=ft.IconButton(
                 ft.icons.ARROW_CIRCLE_RIGHT_SHARP,
-                # on_click=,
+                on_click=ativar_drawer,
                 icon_color="#FFFF00"  # Yellow
             ),
 

@@ -15,9 +15,9 @@ class FrontExe:
 
         navd = NavegationDrawer()
         navd.criar_drawer()
+        navd.desativar_drawer()
 
         home_jh = Home()
         home_jh.criar_appbar()
-        
 
         Pagina.PAGE.update()
