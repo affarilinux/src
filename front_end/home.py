@@ -10,6 +10,12 @@ class Home:
 
         self.pagehome = Pagina.PAGE
 
+    def remover_home(self):
+
+        self.pagehome.remove(self.appbar)
+
+        self.pagehome.update()
+
     def criar_appbar(self):
 
         def ativar_drawer(e):
@@ -22,7 +28,9 @@ class Home:
             self.pagehome.update()
 
         ######################################
-        self.pagehome.appbar = AppBar(
+        # self.pagehome.appbar = AppBar(
+
+        self.appbar = AppBar(
 
             leading=ft.IconButton(
                 ft.icons.ARROW_CIRCLE_RIGHT_SHARP,
@@ -41,3 +49,5 @@ class Home:
             bgcolor="#4F4F4F"
 
         )
+
+        self.pagehome.add(self.appbar)

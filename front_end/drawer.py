@@ -12,11 +12,11 @@ class NavegationDrawer:
     def criar_drawer(self):
         def ativar_index_janela(e):
 
-            print(e.control.selected_index)
+            self.filtro_janela(e.control.selected_index)
 
         ###############################################
         self.pagedrawer.drawer = NavigationDrawer(
-
+            # self.drawer = NavegationDrawer(
 
             on_change=ativar_index_janela,
             controls=[
@@ -24,11 +24,15 @@ class NavegationDrawer:
                 NavigationDrawerDestination(
                     label="CONFIGURAÇÕES",
                     icon=Icons.SETTINGS_OUTLINED,
-                    selected_icon=Icon(Icons.SETTINGS_SUGGEST_ROUNDED),
+                    selected_icon=Icon(
+                        Icons.SETTINGS_SUGGEST_ROUNDED
+                    ),
                 ),
                 Divider(thickness=2),
                 NavigationDrawerDestination(
-                    icon=Icon(Icons.HOME_WORK_OUTLINED),
+                    icon=Icon(
+                        Icons.HOME_WORK_OUTLINED
+                    ),
                     label="HOME",
                     selected_icon=Icons.HOME_WORK,
                 ),
@@ -40,6 +44,8 @@ class NavegationDrawer:
             ],
         )
 
+        # self.pagedrawer.add(self.drawer)
+
     def desativar_drawer(self):
 
         self.pagedrawer.drawer.open = False
@@ -47,3 +53,26 @@ class NavegationDrawer:
     def ativar_drawer(self):
 
         self.pagedrawer.drawer.open = True
+
+    def filtro_janela(self, e_):
+
+        from front_exe import FrontExe
+
+        if e_ != FrontExe.index_janela:
+
+            self.remover_janela()
+
+    def remover_janela(self,):
+
+    def mudar_janela(self, e_1):
+
+        if e_ == 0:
+
+        elif e_ == 1:
+
+            # remover
+            # criar
+            from front_end.home import Home
+
+            home = Home()
+            home.criar_appbar()

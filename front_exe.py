@@ -9,6 +9,8 @@ class Pagina:
 
 class FrontExe:
 
+    index_janela = 1
+
     def janela_home(self, page) -> None:
 
         Pagina.PAGE = page
