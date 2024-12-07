@@ -9,8 +9,7 @@ def main(page: Page):
 
     page.adaptive = True
     page.bgcolor = "#808080"  # Gray
-    APP_EXE = FrontExe()
-    APP_EXE.janela_home(page)
+    APP_EXE = FrontExe(page)
 
 
 if __name__ == "__main__":
