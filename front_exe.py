@@ -78,19 +78,23 @@ class FrontExe:
         Pagina.PAGE.drawer.open = True
 
     def filtro_janela(self, e_):
-
+        print(FrontExe.index_janela)
         if e_ != FrontExe.index_janela:
 
             self.remover_janela()
             self.mudar_janela(e_)
 
             FrontExe.index_janela = e_
+            print(FrontExe.index_janela)
+        print("##**")
 
     def remover_janela(self):
 
         match FrontExe.index_janela:
 
-            # case 0:
+            case 0:
+
+                self.configuracoes_wg.remover_pagina()
 
             case 1:
 
