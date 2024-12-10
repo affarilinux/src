@@ -4,6 +4,7 @@ from flet import (NavigationDrawer, NavigationDrawerDestination, Container, Icon
 
 from front_end.home import Home
 from front_end.configuracoes import Configuracoes
+from front_end.appbar import AppBar
 
 
 class Pagina:
@@ -22,15 +23,18 @@ class FrontExe:
 
         self.home_wg = Home()
         self.configuracoes_wg = Configuracoes()
+        self.appbar_wg = AppBar()
 
         self.funcao_init()
 
     def funcao_init(self):
 
         self.criar_drawer()
-        self.desativar_drawer()
 
-        self.home_wg.criar_pagina()
+        self.appbar_wg.appbar_config()
+        self.appbar_wg.appbar_title("HOME")
+        self.appbar_wg.appbar_leading_drawer()
+        self.home_wg.home_criar_pagina()
 
         Pagina.PAGE.update()
 
@@ -69,13 +73,7 @@ class FrontExe:
             ],
         )
 
-    def desativar_drawer(self):
-
         Pagina.PAGE.drawer.open = False
-
-    def ativar_drawer(self):
-
-        Pagina.PAGE.drawer.open = True
 
     def filtro_janela(self, e_):
         print(FrontExe.index_janela)
@@ -94,11 +92,13 @@ class FrontExe:
 
             case 0:
 
-                self.configuracoes_wg.remover_pagina()
+                self.configuracoes_wg.config_remover_pagina()
 
             case 1:
 
-                self.home_wg.remover_pagina()
+                self.home_wg.home_remover_pagina()
+
+        Pagina.PAGE.update()
 
     def mudar_janela(self, e_1):
 
@@ -106,8 +106,14 @@ class FrontExe:
 
             case 0:
 
-                self.configuracoes_wg.criar_pagina()
+                self.configuracoes_wg.config_criar_pagina()
+
+                self.appbar_wg.appbar_title("CONFIGURAÇÕES")
 
             case 1:
 
-                self.home_wg.criar_pagina()
+                self.home_wg.home_criar_pagina()
+
+                self.appbar_wg.appbar_title("HOME")
+
+        Pagina.PAGE.update()

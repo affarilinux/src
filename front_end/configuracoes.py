@@ -1,111 +1,25 @@
-from flet import AppBar, IconButton, icons, Text, FilledButton, Row
+from flet import icons, FilledButton, Row, Text, IconButton
+
+from front_end.LOJA import Loja
 
 
-class Loja:
+class Configuracoes():
 
-    def loja_criar_appbar(self):
+    def __init__(self):
 
-        from front_exe import Pagina
+        self.loja_wg = Loja()
 
-        def voltar_configuracoes(e):
-
-            self.remover_pagina()
-
-            Configuracoes.criar_pagina()
-
-            Pagina.PAGE.update()
-
-        # appbar so aparece se for com esse nome
-        self.appbar = AppBar(
-
-            leading=IconButton(
-                icons.ARROW_CIRCLE_RIGHT_SHARP,
-                on_click=voltar_configuracoes,
-                icon_color="#FFFF00"  # Yellow
-            ),
-
-            leading_width=40,
-
-            title=Text(
-                "LOJA",
-                color="#FFFF00"  # Yellow
-            ),
-            center_title=True,
-
-            bgcolor="#4F4F4F"  # grey31
-
-        )
-
-        Pagina.PAGE.appbar = self.appbar
-
-    def loja_criar_pagina(self):
-
-        from front_exe import Pagina
-
-        self.loja_criar_appbar()
-
-        Pagina.PAGE.update()
-
-    def loja_remover_pagina(self):
-
-        from front_exe import Pagina
-
-        Pagina.PAGE.appbar = None  # Remove AppBar
-
-        Pagina.PAGE.update()
-
-
-class Configuracoes(Loja):
-
-    def config_criar_appbar(self):
-
-        from front_exe import Pagina
-
-        def ativar_drawer(e):
-
-            Pagina.PAGE.drawer.open = True
-            Pagina.PAGE.update()
-
-        # appbar so aparece se for assim
-        self.appbar = AppBar(
-
-            leading=IconButton(
-                icons.ARROW_CIRCLE_RIGHT_SHARP,
-                on_click=ativar_drawer,
-                icon_color="#FFFF00"  # Yellow
-            ),
-
-            leading_width=40,
-
-            title=Text(
-                "CONFIGURAÇÕES",
-                color="#FFFF00"  # Yellow
-            ),
-            center_title=True,
-
-            bgcolor="#4F4F4F"  # grey31
-
-        )
-
-        Pagina.PAGE.appbar = self.appbar
-
-    def config_criar_button(self):
+    def config_criar_button_loja(self):
 
         from front_exe import Pagina
 
         def janela_loja(e):
 
-            # self.loja()
-
-            self.appbar.title = Text(
-                "Loja",
-                color="#FFFF00"  # Yellow
-            )
-
-            Pagina.PAGE.update()
+            self.bt_loja()
 
         # Cria o botão com expand=True
-        loja = FilledButton(
+        # lista botoes
+        bt_loja = FilledButton(
             "LOJA",
             icons.ADD_HOME_WORK_ROUNDED,
             expand=True,
@@ -115,34 +29,78 @@ class Configuracoes(Loja):
 
         self.loja_row = Row(  # Cria o contêiner
             controls=[
-                loja
+                bt_loja
             ],
             expand=True
         )
 
         Pagina.PAGE.add(self.loja_row)  # Adiciona o contêiner à página
 
-    def loja(self):
+    def bt_loja(self):
 
-        self.remover_pagina()
+        from front_exe import Pagina
 
-        # self.loja_criar_pagina()
+        ## configiracoes##
+        self.config_remover_pagina()
+
+        ### loja##
+        self.loja_wg.lj_criar_pagina()
+        # appbar mudar aba configuracoes
+
+        def def_voltar(e):
+
+            self.bt_loja_config()
+
+        Pagina.PAGE.appbar.title = Text(
+            "LOJA",
+            color="#FFFF00"  # Yellow
+        )
+
+        Pagina.PAGE.appbar.leading = IconButton(
+            icon=icons.ARROW_BACK,
+            on_click=def_voltar,
+            icon_color="#FFFF00"  # Yellow
+        )
+
+        Pagina.PAGE.update()
+
+    def bt_loja_config(self):
+
+        from front_exe import Pagina
+
+        # loja
+
+        # configuracoes
+        self.config_criar_pagina()
+
+        Pagina.PAGE.appbar.title = Text(
+            "CONFIGURAÇÕES",
+            color="#FFFF00"  # Yellow
+        )
+
+        def ativar_drawer(e):
+            Pagina.PAGE.drawer.open = True
+            Pagina.PAGE.update()
+
+        Pagina.PAGE.appbar.leading = IconButton(
+            icon=icons.VIEW_LIST_ROUNDED,
+            on_click=ativar_drawer,
+            icon_color="#FFFF00"  # Yellow
+        )
+
+        Pagina.PAGE.update()
+
+    def config_criar_pagina(self):
+
+        self.config_criar_button_loja()
+
         from front_exe import Pagina
         Pagina.PAGE.update()
 
-    def criar_pagina(self):
-
-        self.config_criar_appbar()
-        self.config_criar_button()
-
-        from front_exe import Pagina
-        Pagina.PAGE.update()
-
-    def remover_pagina(self):
+    def config_remover_pagina(self):
 
         from front_exe import Pagina
 
-        Pagina.PAGE.appbar = None  # Remove AppBar
         # Pagina.PAGE.controls.remove(self.loja_row)  # Remove o contêiner
         if getattr(self, "loja_row", None) and self.loja_row in Pagina.PAGE.controls:
             Pagina.PAGE.controls.remove(self.loja_row)
