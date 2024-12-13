@@ -1,42 +1,13 @@
-
 from flet import (FloatingActionButton, Icons, SnackBar, Text, FontWeight, ListView
                   )
 import flet as ft
 
 
-class Loja:
+class produto:
 
-    def lj_criar_panellist(self):
+    def pd_criar_panellist(self):
+
         from front_exe import Pagina
-
-        """panel = ft.ExpansionPanelList(
-            expand_icon_color=ft.Colors.AMBER,
-            elevation=8,
-            divider_color=ft.Colors.AMBER,
-
-        )
-
-        colors = [
-            ft.Colors.GREEN_500,
-            ft.Colors.BLUE_800,
-            ft.Colors.RED_800,
-        ]
-
-        for i in range(30):
-            exp = ft.ExpansionPanel(
-                bgcolor=colors[i % len(colors)],
-                header=ft.ListTile(title=ft.Text(f"Panel {i}")),
-            )
-
-            exp.content = ft.ListTile(
-                title=ft.Text(f"This is in Panel {i}"),
-                subtitle=ft.Text(f"Press the icon to delete panel {i}"),
-                trailing=ft.IconButton(
-                    ft.Icons.DELETE,
-                    data=exp),
-            )
-
-            panel.controls.append(exp)"""
 
         panel = ft.ExpansionPanelList(
             expand_icon_color=ft.Colors.AMBER,
@@ -89,7 +60,6 @@ class Loja:
             panel.controls.append(exp)
 
         def handle_scroll(e):
-
             # Desaparecer o botão imediatamente quando rolar para baixo
             if e.scroll_delta is not None:
 
@@ -113,11 +83,18 @@ class Loja:
 
         Pagina.PAGE.add(list_view)
 
-    def lj_criar_button_lista(self):
+    def pd_criar_button_lista(self):
+
         from front_exe import Pagina
 
         def salvar_banco(e):
-            self.dialogo_sqlite()
+
+            Pagina.PAGE.open(SnackBar(Text(  # barra inferior
+                "{} Salvo.".format("tenda"),
+                color="#4F4F4F",  # Grey
+                size=20,
+                weight=FontWeight.W_900
+            )))
 
         Pagina.PAGE.floating_action_button = FloatingActionButton(
             icon=Icons.ADD,
@@ -127,50 +104,15 @@ class Loja:
             visible=True  # Define inicialmente visível
         )
 
-    def dialogo_sqlite(self):
+    def pd_criar_pagina(self):
 
         from front_exe import Pagina
 
-        # Campo de entrada no diálogo
-        dialog_textfield = ft.TextField(label="Digite algo:", expand=True)
-
-        material_actions = [
-            ft.TextButton(text="Yes",  # on_click=handle_action_click
-                          ),
-            ft.TextButton(text="No",  # on_click=handle_action_click
-                          ),
-
-        ]
-        dialog = ft.AlertDialog(
-            title=ft.Text("Digite o nome:"),
-            content=dialog_textfield,  # primaria
-            actions=material_actions,  # secundaria
-        )
-
-        Pagina.PAGE.open(dialog)
-
+        self.pd_criar_panellist()
+        self.pd_criar_button_lista()
         Pagina.PAGE.update()
 
-    def snack_bar_floating_button(self):
-
-        from front_exe import Pagina
-
-        Pagina.PAGE.open(SnackBar(Text(
-            "{} Salvo.".format("tenda"),
-            color="#4F4F4F",  # Grey
-            size=20,
-            weight=FontWeight.W_900
-        )))
-
-    def lj_criar_pagina(self):
-
-        from front_exe import Pagina
-
-        self.lj_criar_panellist()
-        self.lj_criar_button_lista()
-        Pagina.PAGE.update()
-
-    def lj_remover_pagina(self):
+    def pd_remover_pagina(self):
 
         from front_exe import Pagina
 

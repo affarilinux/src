@@ -66,9 +66,9 @@ class FrontExe:
                     selected_icon=Icons.HOME_WORK,
                 ),
                 NavigationDrawerDestination(
-                    icon=Icon(Icons.PHONE_OUTLINED),
-                    label="Item 3",
-                    selected_icon=Icons.PHONE,
+                    icon=Icons.SHOPPING_CART_OUTLINED,
+                    label="PRODUTOS",
+                    selected_icon=Icons.SHOPPING_CART_ROUNDED,
                 ),
             ],
         )

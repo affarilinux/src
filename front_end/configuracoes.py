@@ -45,6 +45,7 @@ class Configuracoes():
 
         ### loja##
         self.loja_wg.lj_criar_pagina()
+
         # appbar mudar aba configuracoes
 
         def def_voltar(e):
@@ -79,10 +80,12 @@ class Configuracoes():
         )
 
         def ativar_drawer(e):
+
             Pagina.PAGE.drawer.open = True
             Pagina.PAGE.update()
 
         Pagina.PAGE.appbar.leading = IconButton(
+
             icon=icons.VIEW_LIST_ROUNDED,
             on_click=ativar_drawer,
             icon_color="#FFFF00"  # Yellow
