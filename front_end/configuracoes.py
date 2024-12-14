@@ -1,8 +1,6 @@
 from flet import icons, FilledButton, Row, Text, IconButton
 
-from front_end.LOJA import Loja
-
-from banco_sqlite.loja import LojaDB
+from front_end.loja.LOJA import Loja
 
 
 class Configuracoes():
@@ -12,7 +10,7 @@ class Configuracoes():
         self.loja_wg = Loja()
 
         # self.loja_db_cf = LojaDB()
-        # self.loja_db_cf.selecionar_nome_contagem()
+        # self.loja_db_cf.ljdb_selecionar_nome_contagem()
 
     def config_criar_button_loja(self):
 
