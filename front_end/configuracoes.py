@@ -2,12 +2,17 @@ from flet import icons, FilledButton, Row, Text, IconButton
 
 from front_end.LOJA import Loja
 
+from banco_sqlite.loja import LojaDB
+
 
 class Configuracoes():
 
     def __init__(self):
 
         self.loja_wg = Loja()
+
+        # self.loja_db_cf = LojaDB()
+        # self.loja_db_cf.selecionar_nome_contagem()
 
     def config_criar_button_loja(self):
 
@@ -35,6 +40,8 @@ class Configuracoes():
         )
 
         Pagina.PAGE.add(self.loja_row)  # Adiciona o contêiner à página
+
+    # criar loja
 
     def bt_loja(self):
 
@@ -65,11 +72,14 @@ class Configuracoes():
 
         Pagina.PAGE.update()
 
+    # remover loja
     def bt_loja_config(self):
 
         from front_exe import Pagina
 
         # loja
+
+        self.loja_wg.lj_remover_pagina()
 
         # configuracoes
         self.config_criar_pagina()
@@ -92,6 +102,8 @@ class Configuracoes():
         )
 
         Pagina.PAGE.update()
+    ####################################################
+    ####################################################
 
     def config_criar_pagina(self):
 

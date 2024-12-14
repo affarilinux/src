@@ -2,3 +2,4 @@ storage/
 externo/
 __pycache__
 assets/
+estoque.db

@@ -1,60 +1,47 @@
 
-from flet import (FloatingActionButton, Icons, SnackBar, Text, FontWeight, ListView
+from flet import (FloatingActionButton, Icons, SnackBar, Text,
+                  FontWeight, ListView, Colors
                   )
 import flet as ft
+
+from banco_sqlite.loja import LojaDB
 
 
 class Loja:
 
+    def __init__(self):
+
+        self.lojadb = LojaDB()
+
     def lj_criar_panellist(self):
         from front_exe import Pagina
 
-        """panel = ft.ExpansionPanelList(
-            expand_icon_color=ft.Colors.AMBER,
-            elevation=8,
-            divider_color=ft.Colors.AMBER,
+        def editar_lista(e):
 
-        )
+            self.dialogo_editar()
 
+        varlist_loja = self.lojadb.selecionar_nome_contagem()
+
+        # Lista de cores para os painéis
         colors = [
-            ft.Colors.GREEN_500,
-            ft.Colors.BLUE_800,
-            ft.Colors.RED_800,
+            "#00FF7F",  # SpringGreen
+            "#20B2AA",  # LightSeaGreen
+            "#708090",  # SlateGray
+            "#B8860B",  # DarkGoldenrod
+            "#4B0082"  # Indigo
+
         ]
 
-        for i in range(30):
+        # Lista para armazenar os painéis
+        panels = []
+
+        # Criando os painéis no loop
+        for i, loja_nome in enumerate(varlist_loja):
             exp = ft.ExpansionPanel(
                 bgcolor=colors[i % len(colors)],
-                header=ft.ListTile(title=ft.Text(f"Panel {i}")),
-            )
-
-            exp.content = ft.ListTile(
-                title=ft.Text(f"This is in Panel {i}"),
-                subtitle=ft.Text(f"Press the icon to delete panel {i}"),
-                trailing=ft.IconButton(
-                    ft.Icons.DELETE,
-                    data=exp),
-            )
-
-            panel.controls.append(exp)"""
-
-        panel = ft.ExpansionPanelList(
-            expand_icon_color=ft.Colors.AMBER,
-            elevation=8,
-            divider_color=ft.Colors.AMBER,
-
-        )
-
-        colors = [
-            ft.Colors.GREEN_500,
-            ft.Colors.BLUE_800,
-            ft.Colors.RED_800,
-        ]
-
-        for i in range(30):
-            exp = ft.ExpansionPanel(
-                bgcolor=colors[i % len(colors)],
-                header=ft.ListTile(title=ft.Text(f"Panel {i}")),
+                header=ft.ListTile(
+                    title=ft.Text(f" {loja_nome[0]}")
+                ),
             )
 
             # Adicionando múltiplos IconButtons no conteúdo
@@ -64,29 +51,34 @@ class Loja:
                         [
                             ft.IconButton(
                                 ft.Icons.EDIT,
-                                tooltip="Edit",
-                                # on_click=handle_edit,
-                                data=i,
+                                tooltip="Editar",
+                                data=loja_nome,
+                                on_click=editar_lista
                             ),
                             ft.IconButton(
                                 ft.Icons.DELETE,
-                                tooltip="Delete",
-                                # on_click=handle_delete,
-                                data=exp,
+                                tooltip="Deletar",
+                                data=loja_nome,
                             ),
-                            ft.IconButton(
-                                ft.Icons.SHARE,
-                                tooltip="Share",
-                                # on_click=handle_share,
-                                data=i,
-                            ),
+
                         ],
                         alignment="start",
                     ),
                 ]
             )
 
-            panel.controls.append(exp)
+            # Adiciona o painel à lista de painéis
+            panels.append(exp)
+
+        panel = ft.ExpansionPanelList(
+            expand_icon_color=ft.Colors.AMBER,
+            elevation=8,
+            divider_color=ft.Colors.AMBER,
+            controls=panels
+
+        )
+        # ****************************************
+        # rolo da lista
 
         def handle_scroll(e):
 
@@ -103,7 +95,7 @@ class Loja:
                     Pagina.PAGE.floating_action_button.visible = True
                     Pagina.PAGE.update()
 
-        list_view = ListView(
+        self.list_view = ListView(
             expand=True,
             spacing=10,
             padding=10,
@@ -111,7 +103,37 @@ class Loja:
             on_scroll=handle_scroll,
         )
 
-        Pagina.PAGE.add(list_view)
+        Pagina.PAGE.add(self.list_view)
+
+    def dialogo_editar(self):
+
+        from front_exe import Pagina
+
+        dialog_textfield = ft.TextField(label="Editar nome:", expand=True)
+
+        material_actions = [
+            ft.TextButton(
+                text="Cancelar",
+                # on_click=Cancelar
+            ),
+            ft.TextButton(
+                text="Aplicar",
+                # on_click=aplicar_dados
+            ),
+
+        ]
+        self.dialog = ft.AlertDialog(
+            title=ft.Text("Digite o nome:"),
+            content=dialog_textfield,  # primaria
+            actions=material_actions,  # secundaria
+        )
+
+        Pagina.PAGE.open(self.dialog)
+
+        Pagina.PAGE.update()
+
+    ##############################################
+    # butao mais
 
     def lj_criar_button_lista(self):
         from front_exe import Pagina
@@ -126,29 +148,64 @@ class Loja:
             foreground_color="#4F4F4F",  # Grey color
             visible=True  # Define inicialmente visível
         )
+    # ****************************************
+    # alertdialog inserir
 
     def dialogo_sqlite(self):
 
         from front_exe import Pagina
 
-        # Campo de entrada no diálogo
+        def Cancelar(e):
+
+            Pagina.PAGE.close(self.dialog)  # Fecha o diálogo
+            Pagina.PAGE.update()
+
+        def aplicar_dados(e):
+
+            self.alertdialog_banco_inserir(dialog_textfield.value)
+
+            # Campo de entrada no diálogo
         dialog_textfield = ft.TextField(label="Digite algo:", expand=True)
 
         material_actions = [
-            ft.TextButton(text="Yes",  # on_click=handle_action_click
-                          ),
-            ft.TextButton(text="No",  # on_click=handle_action_click
-                          ),
+            ft.TextButton(
+                text="Cancelar",
+                on_click=Cancelar
+            ),
+            ft.TextButton(
+                text="Aplicar",
+                on_click=aplicar_dados
+            ),
 
         ]
-        dialog = ft.AlertDialog(
+        self.dialog = ft.AlertDialog(
             title=ft.Text("Digite o nome:"),
             content=dialog_textfield,  # primaria
             actions=material_actions,  # secundaria
         )
 
-        Pagina.PAGE.open(dialog)
+        Pagina.PAGE.open(self.dialog)
 
+        Pagina.PAGE.update()
+
+    def alertdialog_banco_inserir(self, nome):
+
+        from front_exe import Pagina
+
+        if nome != "":
+
+            var_contagem = 1
+            self.lojadb.inserir_nome_contagem(nome, var_contagem)
+
+            Pagina.PAGE.remove(self.list_view)
+            Pagina.PAGE.update()
+
+            self.lj_criar_panellist()
+            Pagina.PAGE.update()
+
+            self.snack_bar_floating_button()
+
+        Pagina.PAGE.close(self.dialog)  # Fecha o diálogo
         Pagina.PAGE.update()
 
     def snack_bar_floating_button(self):
@@ -162,6 +219,8 @@ class Loja:
             weight=FontWeight.W_900
         )))
 
+    #################################################
+    #################################################
     def lj_criar_pagina(self):
 
         from front_exe import Pagina
@@ -175,4 +234,7 @@ class Loja:
         from front_exe import Pagina
 
         Pagina.PAGE.floating_action_button = None
+
+        Pagina.PAGE.remove(self.list_view)
+
         Pagina.PAGE.update()
