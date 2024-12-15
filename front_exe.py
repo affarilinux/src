@@ -3,7 +3,7 @@ from flet import (NavigationDrawer, NavigationDrawerDestination, Container, Icon
 
 
 from front_end.home import Home
-from front_end.configuracoes import Configuracoes
+from front_end.configuracoes.configuracoes import Configuracoes
 from front_end.appbar import AppBar
 
 

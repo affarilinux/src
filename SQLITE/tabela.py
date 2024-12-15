@@ -19,3 +19,19 @@ class SqliteTabela(BaseSqlite):
             
             )"""
         self.withdb.execute(query)
+
+    def tabela_produto(self):
+
+        # banco de dados
+        self.ativar_with()
+
+        """   produto      """
+
+        query = """CREATE TABLE if not exists produto(
+
+            ID_produto INTEGER PRIMARY KEY AUTOINCREMENT,
+
+            nome  TEXT    -- string
+            
+            )"""
+        self.withdb.execute(query)
