@@ -5,7 +5,7 @@ from flet import (SnackBar, Text, FontWeight, TextField, TextButton,
 
 class EditarNome:
 
-    def dialogo_editar(self, titulo):
+    def dialogo_editar_loja(self, titulo):
 
         from front_exe import Pagina
 
@@ -51,7 +51,7 @@ class EditarNome:
 
             if nome not in var_lista_nome:
 
-                var_num = self.pddb_selecionar_index_nome(titulo)
+                var_num = self.ljdb_selecionar_index_nome(titulo)
 
                 self.ljdb_editar_nome(nome, var_num)
 
@@ -60,7 +60,9 @@ class EditarNome:
                 Pagina.PAGE.remove(self.list_view)
                 Pagina.PAGE.update()
 
-                self.lj_criar_panellist()
+                self.lj_criar_panellist(
+                    self.lista_loja_sqlite()
+                )
                 Pagina.PAGE.update()
 
                 Pagina.PAGE.close(self.en_dialog)  # Fecha o diálogo

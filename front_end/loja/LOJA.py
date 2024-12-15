@@ -1,7 +1,7 @@
 
 from flet import (FloatingActionButton, Icons, ListView, ExpansionPanel,
                   ListTile, Text, Column, Row, IconButton, Icons,
-                  ExpansionPanelList, Colors, ButtonStyle
+                  ExpansionPanelList, Colors, ButtonStyle, TextField
                   )
 
 from banco_sqlite.loja import LojaDB
@@ -15,7 +15,23 @@ class Loja(
     DialogMais, LojaDB, EditarNome, Menores
 ):
 
-    def lj_criar_panellist(self):
+    def textfilder_filtro(self):
+
+        from front_exe import Pagina
+
+        def filtrar(e):
+
+            self.text_filtro(self.textfield.value)
+
+        self.textfield = TextField(
+            label="Escreva um nome:",
+            on_change=filtrar
+
+        )
+
+        Pagina.PAGE.add(self.textfield)
+
+    def lj_criar_panellist(self, varlist_loja):
         from front_exe import Pagina
 
         def editar_lista(e):
@@ -23,7 +39,7 @@ class Loja(
             titulo = e.control.data  # Recupera o índice armazenado no botão
 
             # Chama a função com o índice correto
-            self.dialogo_editar(titulo[0])
+            self.dialogo_editar_loja(titulo[0])
 
         def remover_lista(e):
 
@@ -51,8 +67,6 @@ class Loja(
 
         # Lista para armazenar os painéis
         panels = []
-        # Supondo que varlist_loja é uma lista de tuplas [(loja_nome, status), ...]
-        varlist_loja = self.ljdb_selecionar_nome_contagem()  # Obtém os dados da tabela
 
         for i, (loja_nome, status) in enumerate(varlist_loja):
 
@@ -149,8 +163,6 @@ class Loja(
 
         def salvar_banco(e):
 
-            # dialog = DialogMais()
-            # dialog.dialogo()
             self.dialogo()
 
         Pagina.PAGE.floating_action_button = FloatingActionButton(
@@ -168,7 +180,10 @@ class Loja(
 
         from front_exe import Pagina
 
-        self.lj_criar_panellist()
+        self.textfilder_filtro()
+        self.lj_criar_panellist(
+            self.lista_loja_sqlite()
+        )
         self.lj_criar_button_lista()
         Pagina.PAGE.update()
 
@@ -176,6 +191,7 @@ class Loja(
 
         from front_exe import Pagina
 
+        Pagina.PAGE.remove(self.textfield)
         Pagina.PAGE.floating_action_button = None
 
         Pagina.PAGE.remove(self.list_view)

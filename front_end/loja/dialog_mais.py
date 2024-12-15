@@ -61,7 +61,9 @@ class DialogMais:
                 Pagina.PAGE.remove(self.list_view)
                 Pagina.PAGE.update()
 
-                self.lj_criar_panellist()
+                self.lj_criar_panellist(
+                    self.lista_loja_sqlite()
+                )
                 Pagina.PAGE.update()
 
                 Pagina.PAGE.close(self.dialog)  # Fecha o diálogo

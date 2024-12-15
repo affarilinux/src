@@ -106,3 +106,16 @@ class LojaDB(BaseSqlite):
 
         self.commit_banco()
         self.sair_banco()
+
+    def filtro_frase_nome(self, frase):
+
+        query = """SELECT nome,contagem FROM loja WHERE nome LIKE ?"""
+        self.ativar_with()
+
+        self.withdb.execute(query, ('%' + frase + '%',))
+        resultados = self.withdb.fetchall()
+
+        return resultados
+        # nomes_lojas = [row[0] for row in resultados]
+
+        # return nomes_lojas
