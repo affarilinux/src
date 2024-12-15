@@ -3,27 +3,45 @@ from flet import (FloatingActionButton, Icons, ListView, ExpansionPanel,
                   ListTile, Text, Column, Row, IconButton, Icons,
                   ExpansionPanelList, Colors
                   )
-
+import flet as ft
 from banco_sqlite.loja import LojaDB
 
 from front_end.loja.dialog_mais import DialogMais
 from front_end.loja.editar_nome import EditarNome
+from front_end.loja.menores import Menores
 
 
-class Loja(DialogMais, LojaDB, EditarNome):
+class Loja(
+    DialogMais, LojaDB, EditarNome, Menores
+):
 
     def lj_criar_panellist(self):
         from front_exe import Pagina
 
         def editar_lista(e):
 
-            self.dialogo_editar()
+            titulo = e.control.data  # Recupera o índice armazenado no botão
 
-        varlist_loja = self.ljdb_selecionar_nome_contagem()
+            # Chama a função com o índice correto
+            self.dialogo_editar(titulo[0])
+
+        def remover_lista(e):
+
+            titulo_1 = e.control.data  # Recupera o índice armazenado no botão
+
+            self.remover_nome_loja(titulo_1[0])
+
+        def toggle_icon_button(e):
+            titulo_2 = e.control.data
+
+            self.mudar_status_loja(titulo_2[0])
+
+            e.control.selected = not e.control.selected
+            e.control.update()
 
         # Lista de cores para os painéis
         colors = [
-            "#00FF7F",  # SpringGreen
+            "#008000",  # Green
             "#20B2AA",  # LightSeaGreen
             "#708090",  # SlateGray
             "#B8860B",  # DarkGoldenrod
@@ -33,17 +51,23 @@ class Loja(DialogMais, LojaDB, EditarNome):
 
         # Lista para armazenar os painéis
         panels = []
+        # Supondo que varlist_loja é uma lista de tuplas [(loja_nome, status), ...]
+        varlist_loja = self.ljdb_selecionar_nome_contagem()  # Obtém os dados da tabela
 
-        # Criando os painéis no loop
-        for i, loja_nome in enumerate(varlist_loja):
+        for i, (loja_nome, status) in enumerate(varlist_loja):
+
+            # Determina os ícones com base no status
+            icon = Icons.FORMAT_LIST_NUMBERED if status == 1 else Icons.PLAYLIST_REMOVE_OUTLINED
+            selected = (status == 0)  # Define o estado inicial do botão
+
             exp = ExpansionPanel(
                 bgcolor=colors[i % len(colors)],
                 header=ListTile(
-                    title=Text(f" {loja_nome[0]}")
+                    title=Text(f" {loja_nome}")
                 ),
             )
 
-            # Adicionando múltiplos IconButtons no conteúdo
+            # Adicionando os botões ao conteúdo do painel
             exp.content = Column(
                 [
                     Row(
@@ -51,15 +75,27 @@ class Loja(DialogMais, LojaDB, EditarNome):
                             IconButton(
                                 Icons.EDIT,
                                 tooltip="Editar",
-                                data=loja_nome,
+                                data=(loja_nome, status),
                                 on_click=editar_lista
+                            ),
+                            IconButton(
+                                icon=icon,
+                                tooltip="Calcular",
+                                selected_icon=Icons.PLAYLIST_REMOVE_OUTLINED,
+                                selected=selected,
+                                style=ft.ButtonStyle(
+                                    color={"selected": "#8B0000",
+                                           "": "#006400"}
+                                ),
+                                on_click=toggle_icon_button,
+                                data=(loja_nome, status)
                             ),
                             IconButton(
                                 Icons.DELETE,
                                 tooltip="Deletar",
-                                data=loja_nome,
+                                data=(loja_nome, status),
+                                on_click=remover_lista
                             ),
-
                         ],
                         alignment="start",
                     ),
@@ -76,6 +112,7 @@ class Loja(DialogMais, LojaDB, EditarNome):
             controls=panels
 
         )
+
         # ****************************************
         # rolo da lista
 

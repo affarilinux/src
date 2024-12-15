@@ -22,7 +22,7 @@ class LojaDB(BaseSqlite):
         self.sair_banco()
 
     # select
-    # seleciona todos
+    # seleciona todos nome e contage
     def ljdb_selecionar_nome_contagem(self):
 
         query = """SELECT nome,contagem FROM loja"""
@@ -33,7 +33,29 @@ class LojaDB(BaseSqlite):
         resultados = self.withdb.fetchall()
 
         return resultados
-    # seleciona todos
+    # seleciona uma nome return id
+
+    def ljdb_selecionar_index_nome(self, nome):
+
+        query = """SELECT ID_loja FROM loja WHERE nome = ?"""
+        self.ativar_with()
+
+        self.withdb.execute(query, (nome,))
+        resultados = self.withdb.fetchall()
+
+        return resultados[0][0]
+
+    def ljdb_selecionar_contagem_valor(self, id):
+
+        query = """SELECT contagem FROM loja WHERE ID_loja = ?"""
+        self.ativar_with()
+
+        self.withdb.execute(query, (id,))
+        resultados = self.withdb.fetchall()
+
+        return resultados[0][0]
+
+    # seleciona todos nome
 
     def ljdb_selecionar_nome(self):
 
@@ -54,6 +76,33 @@ class LojaDB(BaseSqlite):
     def ljdb_editar_nome(self, nome, id):
 
         query = """UPDATE loja SET nome = ? WHERE ID_loja = ? """
-        self.ativar_with()
+        self.ativar_banco()
 
-        self.withdb.execute(query, (nome, id))
+        self.cursorsq.execute(query, (nome, id))
+
+        self.commit_banco()
+        self.sair_banco()
+
+    def ljdb_editar_contagem(self, number, id):
+
+        query = """UPDATE loja SET contagem = ? WHERE ID_loja = ?"""
+
+        self.ativar_banco()
+
+        self.cursorsq.execute(query, (number, id))
+
+        self.commit_banco()
+        self.sair_banco()
+
+    # remove
+
+    def ljdb_remover_nome_loja(self, nome):
+
+        query = """DELETE FROM loja WHERE nome = ?"""
+
+        self.ativar_banco()
+
+        self.cursorsq.execute(query, (nome, ))
+
+        self.commit_banco()
+        self.sair_banco()

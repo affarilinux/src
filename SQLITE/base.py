@@ -5,7 +5,8 @@ class BaseSqlite:
 
     def ativar_with(self):
 
-        # nao funciona com commit()
+        # nao funciona insert com commit()
+        # nao funciona update com commit()
         with sqlite3.connect('SQLITE/estoque.db') as conn:
 
             self.withdb = conn.cursor()

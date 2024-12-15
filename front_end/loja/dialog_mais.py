@@ -64,13 +64,13 @@ class DialogMais:
                 self.lj_criar_panellist()
                 Pagina.PAGE.update()
 
+                Pagina.PAGE.close(self.dialog)  # Fecha o diálogo
+                Pagina.PAGE.update()
+
             elif nome in var_lista_nome:
 
                 self.snack_bar_floating_button(
                     "escreva outro nome: {}".format(nome))
-
-        Pagina.PAGE.close(self.dialog)  # Fecha o diálogo
-        Pagina.PAGE.update()
 
     def snack_bar_floating_button(self, frase):
 
