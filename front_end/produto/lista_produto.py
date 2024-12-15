@@ -1,13 +1,16 @@
 from flet import (FloatingActionButton, Icons, ListView, ExpansionPanel,
                   ListTile, Text, Column, Row, IconButton, Icons,
-                  ExpansionPanelList, Colors, ButtonStyle
+                  ExpansionPanelList, Colors
                   )
 
 from banco_sqlite.produto import ProdutoDB
+from front_end.produto.menores import Menores
+from front_end.produto.dialog_mais import DialogMais
+from front_end.produto.editar_nome import EditarNome
 
 
 class ListaProduto(
-    ProdutoDB
+    ProdutoDB, DialogMais, EditarNome, Menores
 ):
 
     def pd_criar_panellist(self):
@@ -18,13 +21,13 @@ class ListaProduto(
             titulo = e.control.data  # Recupera o índice armazenado no botão
 
             # Chama a função com o índice correto
-            self.dialogo_editar(titulo[0])
+            self.dialogo_editar_produto(titulo[0])
 
         def remover_lista(e):
 
             titulo_1 = e.control.data  # Recupera o índice armazenado no botão
 
-            self.remover_nome_loja(titulo_1[0])
+            self.remover_nome_produto(titulo_1[0])
 
         # Lista de cores para os painéis
         colors = [
@@ -39,14 +42,14 @@ class ListaProduto(
         # Lista para armazenar os painéis
         panels = []
         # Supondo que varlist_loja é uma lista de tuplas [(loja_nome, status), ...]
-        varlist_loja = self.ljdb_selecionar_nome()  # Obtém os dados da tabela
+        varlist_loja = self.pddb_selecionar_nome()  # Obtém os dados da tabela
 
-        for i, (loja_nome, status) in enumerate(varlist_loja):
+        for i, (loja_nome) in enumerate(varlist_loja):
 
             exp = ExpansionPanel(
                 bgcolor=colors[i % len(colors)],
                 header=ListTile(
-                    title=Text(f" {loja_nome}")
+                    title=Text(f" {loja_nome[0]}")
                 ),
             )
 
@@ -58,14 +61,14 @@ class ListaProduto(
                             IconButton(
                                 Icons.EDIT,
                                 tooltip="Editar",
-                                data=(loja_nome, status),
+                                data=loja_nome,
                                 on_click=editar_lista
                             ),
 
                             IconButton(
                                 Icons.DELETE,
                                 tooltip="Deletar",
-                                data=(loja_nome, status),
+                                data=loja_nome,
                                 on_click=remover_lista
                             ),
                         ],
@@ -113,34 +116,6 @@ class ListaProduto(
 
         Pagina.PAGE.add(self.list_view_pd)
 
-     # ****************************************
-        # rolo da lista
-
-        def handle_scroll(e):
-
-            # Desaparecer o botão imediatamente quando rolar para baixo
-            if e.scroll_delta is not None:
-
-                if e.scroll_delta > 0:  # rola para baixo
-
-                    Pagina.PAGE.floating_action_button.visible = False
-                    Pagina.PAGE.update()
-
-                elif e.scroll_delta < 0:  # rola para cima
-
-                    Pagina.PAGE.floating_action_button.visible = True
-                    Pagina.PAGE.update()
-
-        self.list_view = ListView(
-            expand=True,
-            spacing=10,
-            padding=10,
-            controls=[panel],
-            on_scroll=handle_scroll,
-        )
-
-        Pagina.PAGE.add(self.list_view)
-
     ##############################################
     # butao mais
 
@@ -149,11 +124,11 @@ class ListaProduto(
 
         def salvar_banco(e):
 
-            self.dialogo()
+            self.dialogo_produto()
 
         Pagina.PAGE.floating_action_button = FloatingActionButton(
             icon=Icons.ADD,
-            # on_click=salvar_banco,
+            on_click=salvar_banco,
             bgcolor="#FFFF00",  # Yellow
             foreground_color="#4F4F4F",  # Grey color
             visible=True  # Define inicialmente visível

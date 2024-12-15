@@ -17,6 +17,7 @@ class EditarNome:
         def aplicar_editar(e):
 
             self.dialogo_execucao_editar(en_dialog_textfield.value, titulo)
+
         en_dialog_textfield = TextField(label="Editar nome:", expand=True)
 
         en_material_actions = [
@@ -50,7 +51,7 @@ class EditarNome:
 
             if nome not in var_lista_nome:
 
-                var_num = self.ljdb_selecionar_index_nome(titulo)
+                var_num = self.pddb_selecionar_index_nome(titulo)
 
                 self.ljdb_editar_nome(nome, var_num)
 

@@ -1,49 +1,47 @@
-
 from flet import (SnackBar, Text, FontWeight, TextField, TextButton,
-                  AlertDialog, Text
+                  AlertDialog
                   )
 
 
-class DialogMais:
+class EditarNome:
 
-    def dialogo_produto(self):
+    def dialogo_editar_produto(self, titulo):
 
         from front_exe import Pagina
 
-        def Cancelar(e):
+        def cancelar_editar(e):
 
-            Pagina.PAGE.close(self.dialog_pd)  # Fecha o diálogo
+            Pagina.PAGE.close(self.pd_dialog)  # Fecha o diálogo
             Pagina.PAGE.update()
 
-        def aplicar_dados(e):
+        def aplicar_editar(e):
 
-            self.dialogo_execucao(dialog_textfield.value)
+            self.dialogo_execucao_editar(pd_dialog_textfield.value, titulo)
 
-            # Campo de entrada no diálogo
-        dialog_textfield = TextField(label="Digite algo:", expand=True)
+        pd_dialog_textfield = TextField(label="Editar nome:", expand=True)
 
-        material_actions = [
+        pd_material_actions = [
             TextButton(
                 text="Cancelar",
-                on_click=Cancelar
+                on_click=cancelar_editar
             ),
             TextButton(
                 text="Aplicar",
-                on_click=aplicar_dados
+                on_click=aplicar_editar
             ),
 
         ]
-        self.dialog_pd = AlertDialog(
+        self.pd_dialog = AlertDialog(
             title=Text("Digite o nome:"),
-            content=dialog_textfield,  # primaria
-            actions=material_actions,  # secundaria
+            content=pd_dialog_textfield,  # primaria
+            actions=pd_material_actions,  # secundaria
         )
 
-        Pagina.PAGE.open(self.dialog_pd)
+        Pagina.PAGE.open(self.pd_dialog)
 
         Pagina.PAGE.update()
 
-    def dialogo_execucao(self, nome):
+    def dialogo_execucao_editar(self, nome, titulo):
 
         from front_exe import Pagina
 
@@ -53,7 +51,9 @@ class DialogMais:
 
             if nome not in var_lista_nome:
 
-                self.pddb_inserir_nome_contagem(nome)
+                var_num = self.pddb_selecionar_index_nome(titulo)
+
+                self.pddb_editar_nome(nome, var_num)
 
                 self.snack_bar_floating_button("{} salvo.".format(nome))
 
@@ -63,7 +63,7 @@ class DialogMais:
                 self.pd_criar_panellist()
                 Pagina.PAGE.update()
 
-                Pagina.PAGE.close(self.dialog_pd)  # Fecha o diálogo
+                Pagina.PAGE.close(self.pd_dialog)  # Fecha o diálogo
                 Pagina.PAGE.update()
 
             elif nome in var_lista_nome:
