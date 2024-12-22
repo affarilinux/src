@@ -21,7 +21,7 @@ class Configuracoesloja:
             self.bt_loja_config()
 
         Pagina.PAGE.appbar.title = Text(
-            "LISTA LOJA",
+            "LISTA ALMOXARIFADO",
             color="#FFFF00"  # Yellow
         )
 

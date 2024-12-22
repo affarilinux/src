@@ -1,6 +1,6 @@
 from flet import (FloatingActionButton, Icons, ListView, ExpansionPanel,
                   ListTile, Text, Column, Row, IconButton, Icons,
-                  ExpansionPanelList, Colors
+                  ExpansionPanelList, Colors, TextField
                   )
 
 from banco_sqlite.produto import ProdutoDB
@@ -12,8 +12,23 @@ from front_end.produto.editar_nome import EditarNome
 class ListaProduto(
     ProdutoDB, DialogMais, EditarNome, Menores
 ):
+    def textfilder_filtro_produto(self):
 
-    def pd_criar_panellist(self):
+        from front_exe import Pagina
+
+        def filtrar(e):
+
+            self.text_filtro_produto(self.textfield_pd.value)
+
+        self.textfield_pd = TextField(
+            label="Escreva um nome:",
+            on_change=filtrar
+
+        )
+
+        Pagina.PAGE.add(self.textfield_pd)
+
+    def pd_criar_panellist(self, varlist_loja):
         from front_exe import Pagina
 
         def editar_lista(e):
@@ -41,8 +56,6 @@ class ListaProduto(
 
         # Lista para armazenar os painéis
         panels = []
-        # Supondo que varlist_loja é uma lista de tuplas [(loja_nome, status), ...]
-        varlist_loja = self.pddb_selecionar_nome()  # Obtém os dados da tabela
 
         for i, (loja_nome) in enumerate(varlist_loja):
 
@@ -141,14 +154,20 @@ class ListaProduto(
 
         from front_exe import Pagina
 
-        self.pd_criar_panellist()
+        self.textfilder_filtro_produto()
+        # Supondo que varlist_loja é uma lista de tuplas [(loja_nome, status), ...]
+        varlist_loja = self.lista_produto_sqlite_produto()  # Obtém os dados da tabela
+
+        self.pd_criar_panellist(varlist_loja)
         self.pd_criar_button_lista()
+
         Pagina.PAGE.update()
 
     def pd_remover_pagina(self):
 
         from front_exe import Pagina
 
+        Pagina.PAGE.remove(self.textfield_pd)
         Pagina.PAGE.floating_action_button = None
 
         Pagina.PAGE.remove(self.list_view_pd)

@@ -68,3 +68,14 @@ class ProdutoDB(BaseSqlite):
 
         self.commit_banco()
         self.sair_banco()
+
+    # filtro
+    def filtro_frase_nome_produto(self, frase):
+
+        query = """SELECT nome FROM produto WHERE nome LIKE ?"""
+        self.ativar_with()
+
+        self.withdb.execute(query, ('%' + frase + '%',))
+        resultados = self.withdb.fetchall()
+
+        return resultados

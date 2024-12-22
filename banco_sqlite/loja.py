@@ -66,7 +66,7 @@ class LojaDB(BaseSqlite):
         self.withdb.execute(query)
         resultados = self.withdb.fetchall()
 
-       # Extrair apenas o nome das lojas
+        # Extrair apenas o nome das lojas
         nomes_lojas = [row[0] for row in resultados]
 
         return nomes_lojas
@@ -107,6 +107,7 @@ class LojaDB(BaseSqlite):
         self.commit_banco()
         self.sair_banco()
 
+    # filtro
     def filtro_frase_nome(self, frase):
 
         query = """SELECT nome,contagem FROM loja WHERE nome LIKE ?"""
@@ -116,6 +117,4 @@ class LojaDB(BaseSqlite):
         resultados = self.withdb.fetchall()
 
         return resultados
-        # nomes_lojas = [row[0] for row in resultados]
-
-        # return nomes_lojas
+       

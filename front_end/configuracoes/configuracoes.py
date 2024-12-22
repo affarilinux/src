@@ -25,7 +25,7 @@ class Configuracoes(
         # Cria o botão com expand=True
         # lista botoes
         bt_loja = FilledButton(
-            " LISTA LOJA",
+            " LISTA ALMOXARIFADO",
             icons.ADD_HOME_WORK_ROUNDED,
             expand=True,
             adaptive=True,

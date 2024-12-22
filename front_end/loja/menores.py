@@ -13,7 +13,6 @@ class Menores:
 
         from front_exe import Pagina
 
-        # print(self.filtro_frase_nome(frase))
         Pagina.PAGE.remove(self.list_view)
         Pagina.PAGE.update()
 

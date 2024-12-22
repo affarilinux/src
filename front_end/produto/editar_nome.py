@@ -60,7 +60,9 @@ class EditarNome:
                 Pagina.PAGE.remove(self.list_view_pd)
                 Pagina.PAGE.update()
 
-                self.pd_criar_panellist()
+                self.pd_criar_panellist(
+                    self.lista_produto_sqlite_produto()
+                )
                 Pagina.PAGE.update()
 
                 Pagina.PAGE.close(self.pd_dialog)  # Fecha o diálogo
