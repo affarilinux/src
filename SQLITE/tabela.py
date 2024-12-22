@@ -18,6 +18,7 @@ class SqliteTabela(BaseSqlite):
             contagem INT   -- estar contando ou nao
             
             )"""
+
         self.withdb.execute(query)
 
     def tabela_produto(self):
@@ -34,4 +35,22 @@ class SqliteTabela(BaseSqlite):
             nome  TEXT    -- string
             
             )"""
+
+        self.withdb.execute(query)
+
+    def tabela_entrada(self):
+
+        # banco de dados
+        self.ativar_with()
+
+        """   entrada      """
+
+        query = """CREATE TABLE if not exists entrada(
+
+            ID_entrada INTEGER PRIMARY KEY AUTOINCREMENT,
+
+            nome  TEXT    -- string
+            
+            )"""
+
         self.withdb.execute(query)

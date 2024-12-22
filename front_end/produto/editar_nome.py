@@ -44,6 +44,9 @@ class EditarNome:
     def dialogo_execucao_editar(self, nome, titulo):
 
         from front_exe import Pagina
+        from front_end.menor import Menor
+
+        class_menor = Menor()
 
         if nome != "":
 
@@ -55,7 +58,9 @@ class EditarNome:
 
                 self.pddb_editar_nome(nome, var_num)
 
-                self.snack_bar_floating_button("{} salvo.".format(nome))
+                class_menor.snack_bar_floating_button(
+                    "{} salvo.".format(nome)
+                )
 
                 Pagina.PAGE.remove(self.list_view_pd)
                 Pagina.PAGE.update()
@@ -70,16 +75,6 @@ class EditarNome:
 
             elif nome in var_lista_nome:
 
-                self.snack_bar_floating_button(
-                    "escreva outro nome: {}".format(nome))
-
-    def snack_bar_floating_button(self, frase):
-
-        from front_exe import Pagina
-
-        Pagina.PAGE.open(SnackBar(Text(
-            frase,
-            color="#4F4F4F",  # Grey
-            size=20,
-            weight=FontWeight.W_900
-        )))
+                class_menor.snack_bar_floating_button(
+                    "escreva outro nome: {}".format(nome)
+                )

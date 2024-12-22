@@ -5,6 +5,7 @@ from flet import (NavigationDrawer, NavigationDrawerDestination, Container, Icon
 from front_end.home import Home
 from front_end.configuracoes.configuracoes import Configuracoes
 from front_end.appbar import AppBar
+from front_end.entrada.lista_entrada import Listaentrada
 
 
 class Pagina:
@@ -24,6 +25,7 @@ class FrontExe:
         self.home_wg = Home()
         self.configuracoes_wg = Configuracoes()
         self.appbar_wg = AppBar()
+        self.enter = Listaentrada()
 
         self.funcao_init()
 
@@ -50,25 +52,34 @@ class FrontExe:
             on_change=ativar_index_janela,
             controls=[
                 Container(height=12),
-                NavigationDrawerDestination(
+                NavigationDrawerDestination(  # 0
                     label="CONFIGURAÇÕES",
                     icon=Icons.SETTINGS_OUTLINED,
                     selected_icon=Icon(
                         Icons.SETTINGS_SUGGEST_ROUNDED
                     ),
                 ),
+
                 Divider(thickness=2),
-                NavigationDrawerDestination(
+
+                NavigationDrawerDestination(  # 1
                     icon=Icon(
                         Icons.HOME_WORK_OUTLINED
                     ),
                     label="HOME",
                     selected_icon=Icons.HOME_WORK,
                 ),
-                NavigationDrawerDestination(
-                    icon=Icons.SHOPPING_CART_OUTLINED,
-                    label="PRODUTOS",
-                    selected_icon=Icons.SHOPPING_CART_ROUNDED,
+
+                NavigationDrawerDestination(  # 2
+                    icon=Icons.BUSINESS_CENTER_OUTLINED,
+                    label="ENTRADA",
+                    selected_icon=Icons.BUSINESS_CENTER,
+                ),
+
+                NavigationDrawerDestination(  # 3
+                    icon=Icons.EXIT_TO_APP_OUTLINED,
+                    label="EXIT",
+                    selected_icon=Icons.TRANSIT_ENTEREXIT,
                 ),
             ],
         )
@@ -76,13 +87,16 @@ class FrontExe:
         Pagina.PAGE.drawer.open = False
 
     def filtro_janela(self, e_):
+
         print(FrontExe.index_janela)
+
         if e_ != FrontExe.index_janela:
 
             self.remover_janela()
             self.mudar_janela(e_)
 
             FrontExe.index_janela = e_
+
             print(FrontExe.index_janela)
         print("##**")
 
@@ -97,6 +111,10 @@ class FrontExe:
             case 1:
 
                 self.home_wg.home_remover_pagina()
+
+            case 2:
+
+                self.enter.entry_remover_pagina()
 
         Pagina.PAGE.update()
 
@@ -115,5 +133,11 @@ class FrontExe:
                 self.home_wg.home_criar_pagina()
 
                 self.appbar_wg.appbar_title("HOME")
+
+            case 2:
+
+                self.enter.entry_criar_pagina()
+
+                self.appbar_wg.appbar_title("ENTRADA")
 
         Pagina.PAGE.update()

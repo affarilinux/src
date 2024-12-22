@@ -11,16 +11,17 @@ class Home:
             animation_duration=300,
             tabs=[
                 Tab(
+                    tab_content=Icon(Icons.DOORBELL_OUTLINED),
+                    content=Text("This is Tab 2"),
+                ),
+                Tab(
                     text="Tab 1",
                     content=Container(
                         content=Text("This is Tab 1"),
                         alignment=alignment.center,
                     ),
                 ),
-                Tab(
-                    tab_content=Icon(Icons.SEARCH),
-                    content=Text("This is Tab 2"),
-                ),
+
                 Tab(
                     text="Tab 3",
                     icon=Icons.SETTINGS,

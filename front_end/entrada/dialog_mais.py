@@ -1,3 +1,4 @@
+
 from flet import (SnackBar, Text, FontWeight, TextField, TextButton,
                   AlertDialog, Text
                   )
@@ -5,18 +6,18 @@ from flet import (SnackBar, Text, FontWeight, TextField, TextButton,
 
 class DialogMais:
 
-    def dialogo(self):
+    def dialogo_entrada(self):
 
         from front_exe import Pagina
 
         def Cancelar(e):
 
-            Pagina.PAGE.close(self.dialog)  # Fecha o diálogo
+            Pagina.PAGE.close(self.dialog_pd)  # Fecha o diálogo
             Pagina.PAGE.update()
 
         def aplicar_dados(e):
 
-            self.dialogo_execucao(dialog_textfield.value)
+            self.dm_dialogo_execucao(dialog_textfield.value)
 
             # Campo de entrada no diálogo
         dialog_textfield = TextField(label="Digite algo:", expand=True)
@@ -32,17 +33,17 @@ class DialogMais:
             ),
 
         ]
-        self.dialog = AlertDialog(
+        self.dialog_pd = AlertDialog(
             title=Text("Digite o nome:"),
             content=dialog_textfield,  # primaria
             actions=material_actions,  # secundaria
         )
 
-        Pagina.PAGE.open(self.dialog)
+        Pagina.PAGE.open(self.dialog_pd)
 
         Pagina.PAGE.update()
 
-    def dialogo_execucao(self, nome):
+    def dm_dialogo_execucao(self, nome):
 
         from front_exe import Pagina
         from front_end.menor import Menor
@@ -51,27 +52,25 @@ class DialogMais:
 
         if nome != "":
 
-            var_lista_nome = self.ljdb_selecionar_nome()
+            var_lista_nome = self.et_selecionar_nome()
 
             if nome not in var_lista_nome:
 
-                var_contagem = 1
-
-                self.ljdb_inserir_nome_contagem(nome, var_contagem)
+                self.et_inserir_nome_contagem(nome)
 
                 class_menor.snack_bar_floating_button(
                     "{} salvo.".format(nome)
                 )
 
-                Pagina.PAGE.remove(self.list_view)
+                Pagina.PAGE.remove(self.list_view_ent)
                 Pagina.PAGE.update()
 
-                self.lj_criar_panellist(
-                    self.lista_loja_sqlite()
+                self.pd_criar_panellist(
+                    self.lista_entrada_sqlite()
                 )
                 Pagina.PAGE.update()
 
-                Pagina.PAGE.close(self.dialog)  # Fecha o diálogo
+                Pagina.PAGE.close(self.dialog_pd)  # Fecha o diálogo
                 Pagina.PAGE.update()
 
             elif nome in var_lista_nome:
