@@ -16,16 +16,15 @@ class Menores:
         Pagina.PAGE.remove(self.list_view_ent)
         Pagina.PAGE.update()
 
-        self.pd_criar_panellist(
-            self.filtro_frase_nome_produto(frase)
-        )
+        filtro = self.et_filtro_frase_nome(frase)
+        self.pd_criar_panellist(filtro[:: -1])
         Pagina.PAGE.update()
 
     def remover_nome_entrada(self, titulo):
 
         from front_exe import Pagina
 
-        self.pddb_remover_nome_loja(titulo)
+        self.et_remover_nome(titulo)
 
         Pagina.PAGE.remove(self.list_view_ent)
         Pagina.PAGE.update()

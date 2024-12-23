@@ -78,8 +78,14 @@ class FrontExe:
 
                 NavigationDrawerDestination(  # 3
                     icon=Icons.EXIT_TO_APP_OUTLINED,
-                    label="EXIT",
+                    label="SAIDA",
                     selected_icon=Icons.TRANSIT_ENTEREXIT,
+                ),
+
+                NavigationDrawerDestination(  # 3
+                    icon=Icons.WORKSPACES_OUTLINE,
+                    label="ESTOQUE",
+                    selected_icon=Icons.WORKSPACES_FILLED,
                 ),
             ],
         )

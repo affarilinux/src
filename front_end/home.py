@@ -15,7 +15,7 @@ class Home:
                     content=Text("This is Tab 2"),
                 ),
                 Tab(
-                    text="Tab 1",
+                    text="Lista compra",
                     content=Container(
                         content=Text("This is Tab 1"),
                         alignment=alignment.center,

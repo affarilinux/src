@@ -7,10 +7,11 @@ from flet import (FloatingActionButton, Icons, ListView, ExpansionPanel,
 from banco_sqlite.entrada import EntradaDB
 from front_end.entrada.menores import Menores
 from front_end.entrada.dialog_mais import DialogMais
+from front_end.entrada.editar_nome import EditarNome
 
 
 class Listaentrada(
-    EntradaDB, Menores, DialogMais
+    EntradaDB, Menores, DialogMais, EditarNome
 ):
 
     def entry_textfilder_filtro(self):

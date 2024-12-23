@@ -17,7 +17,7 @@ class Menores:
         Pagina.PAGE.update()
 
         self.lj_criar_panellist(
-            self.filtro_frase_nome(frase)
+            self.et_filtro_frase_nome(frase)
         )
         Pagina.PAGE.update()
 

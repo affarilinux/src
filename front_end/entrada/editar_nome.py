@@ -50,23 +50,23 @@ class EditarNome:
 
         if nome != "":
 
-            var_lista_nome = self.pddb_selecionar_nome()
+            var_lista_nome = self.et_selecionar_nome()
 
             if nome not in var_lista_nome:
 
-                var_num = self.pddb_selecionar_index_nome(titulo)
+                var_num = self.et_selecionar_index_nome(titulo)
 
-                self.pddb_editar_nome(nome, var_num)
+                self.et_editar_nome(nome, var_num)
 
                 class_menor.snack_bar_floating_button(
                     "{} salvo.".format(nome)
                 )
 
-                Pagina.PAGE.remove(self.list_view_pd)
+                Pagina.PAGE.remove(self.list_view_ent)
                 Pagina.PAGE.update()
 
                 self.pd_criar_panellist(
-                    self.lista_produto_sqlite_produto()
+                    self.lista_entrada_sqlite()
                 )
                 Pagina.PAGE.update()
 

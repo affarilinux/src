@@ -1,4 +1,4 @@
-from flet import (SnackBar, Text, FontWeight, TextField, TextButton,
+from flet import ( Text, TextField, TextButton,
                   AlertDialog
                   )
 
