@@ -3,32 +3,30 @@ from flet import (FloatingActionButton, Icons, ListView, ExpansionPanel,
                   ExpansionPanelList, Colors, TextField
                   )
 
+from banco_sqlite.produto import ProdutoDB
+from front_configuracao.produto.menores import Menores
+from front_configuracao.produto.dialog_mais import DialogMais
+from front_configuracao.produto.editar_nome import EditarNome
 
-from banco_sqlite.entrada import EntradaDB
-from front_end.entrada.menores import Menores
-from front_end.entrada.dialog_mais import DialogMais
-from front_end.entrada.editar_nome import EditarNome
 
-
-class Listaentrada(
-    EntradaDB, Menores, DialogMais, EditarNome
+class ListaProduto(
+    ProdutoDB, DialogMais, EditarNome, Menores
 ):
-
-    def entry_textfilder_filtro(self):
+    def textfilder_filtro_produto(self):
 
         from front_exe import Pagina
 
         def filtrar(e):
 
-            self.text_filtro_entrada(self.textfield_entry.value)
+            self.text_filtro_produto(self.textfield_pd.value)
 
-        self.textfield_entry = TextField(
+        self.textfield_pd = TextField(
             label="Escreva um nome:",
             on_change=filtrar
 
         )
 
-        Pagina.PAGE.add(self.textfield_entry)
+        Pagina.PAGE.add(self.textfield_pd)
 
     def pd_criar_panellist(self, varlist_loja):
         from front_exe import Pagina
@@ -44,7 +42,7 @@ class Listaentrada(
 
             titulo_1 = e.control.data  # Recupera o índice armazenado no botão
 
-            self.remover_nome_entrada(titulo_1[0])
+            self.remover_nome_produto(titulo_1[0])
 
         # Lista de cores para os painéis
         colors = [
@@ -121,7 +119,7 @@ class Listaentrada(
                     Pagina.PAGE.floating_action_button.visible = True
                     Pagina.PAGE.update()
 
-        self.list_view_ent = ListView(
+        self.list_view_pd = ListView(
             expand=True,
             spacing=10,
             padding=10,
@@ -129,7 +127,7 @@ class Listaentrada(
             on_scroll=handle_scroll,
         )
 
-        Pagina.PAGE.add(self.list_view_ent)
+        Pagina.PAGE.add(self.list_view_pd)
 
     ##############################################
     # butao mais
@@ -139,7 +137,7 @@ class Listaentrada(
 
         def salvar_banco(e):
 
-            self.dialogo_entrada()
+            self.dialogo_produto()
 
         Pagina.PAGE.floating_action_button = FloatingActionButton(
             icon=Icons.ADD,
@@ -151,26 +149,27 @@ class Listaentrada(
 
     #################################################
     # class
-    def entry_criar_pagina(self):
+
+    def pd_criar_pagina(self):
 
         from front_exe import Pagina
 
-        self.entry_textfilder_filtro()
+        self.textfilder_filtro_produto()
         # Supondo que varlist_loja é uma lista de tuplas [(loja_nome, status), ...]
-        varlist_loja = self.lista_entrada_sqlite()  # Obtém os dados da tabela
+        varlist_loja = self.lista_produto_sqlite_produto()  # Obtém os dados da tabela
 
         self.pd_criar_panellist(varlist_loja)
         self.pd_criar_button_lista()
 
         Pagina.PAGE.update()
 
-    def entry_remover_pagina(self):
+    def pd_remover_pagina(self):
 
         from front_exe import Pagina
 
-        Pagina.PAGE.remove(self.textfield_entry)
+        Pagina.PAGE.remove(self.textfield_pd)
         Pagina.PAGE.floating_action_button = None
 
-        Pagina.PAGE.remove(self.list_view_ent)
+        Pagina.PAGE.remove(self.list_view_pd)
 
         Pagina.PAGE.update()

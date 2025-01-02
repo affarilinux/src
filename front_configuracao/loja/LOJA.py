@@ -1,34 +1,37 @@
+
 from flet import (FloatingActionButton, Icons, ListView, ExpansionPanel,
                   ListTile, Text, Column, Row, IconButton, Icons,
-                  ExpansionPanelList, Colors, TextField
+                  ExpansionPanelList, Colors, ButtonStyle, TextField
                   )
 
-from banco_sqlite.produto import ProdutoDB
-from front_end.produto.menores import Menores
-from front_end.produto.dialog_mais import DialogMais
-from front_end.produto.editar_nome import EditarNome
+from banco_sqlite.loja import LojaDB
+
+from front_configuracao.loja.dialog_mais import DialogMais
+from front_configuracao.loja.editar_nome import EditarNome
+from front_configuracao.loja.menores import Menores
 
 
-class ListaProduto(
-    ProdutoDB, DialogMais, EditarNome, Menores
+class Loja(
+    DialogMais, LojaDB, EditarNome, Menores
 ):
-    def textfilder_filtro_produto(self):
+
+    def textfilder_filtro(self):
 
         from front_exe import Pagina
 
         def filtrar(e):
 
-            self.text_filtro_produto(self.textfield_pd.value)
+            self.text_filtro(self.textfield.value)
 
-        self.textfield_pd = TextField(
+        self.textfield = TextField(
             label="Escreva um nome:",
             on_change=filtrar
 
         )
 
-        Pagina.PAGE.add(self.textfield_pd)
+        Pagina.PAGE.add(self.textfield)
 
-    def pd_criar_panellist(self, varlist_loja):
+    def lj_criar_panellist(self, varlist_loja):
         from front_exe import Pagina
 
         def editar_lista(e):
@@ -36,13 +39,21 @@ class ListaProduto(
             titulo = e.control.data  # Recupera o índice armazenado no botão
 
             # Chama a função com o índice correto
-            self.dialogo_editar_produto(titulo[0])
+            self.dialogo_editar_loja(titulo[0])
 
         def remover_lista(e):
 
             titulo_1 = e.control.data  # Recupera o índice armazenado no botão
 
-            self.remover_nome_produto(titulo_1[0])
+            self.remover_nome_loja(titulo_1[0])
+
+        def toggle_icon_button(e):
+            titulo_2 = e.control.data
+
+            self.mudar_status_loja(titulo_2[0])
+
+            e.control.selected = not e.control.selected
+            e.control.update()
 
         # Lista de cores para os painéis
         colors = [
@@ -57,12 +68,16 @@ class ListaProduto(
         # Lista para armazenar os painéis
         panels = []
 
-        for i, (loja_nome) in enumerate(varlist_loja):
+        for i, (loja_nome, status) in enumerate(varlist_loja):
+
+            # Determina os ícones com base no status
+            icon = Icons.FORMAT_LIST_NUMBERED if status == 1 else Icons.PLAYLIST_REMOVE_OUTLINED
+            selected = (status == 0)  # Define o estado inicial do botão
 
             exp = ExpansionPanel(
                 bgcolor=colors[i % len(colors)],
                 header=ListTile(
-                    title=Text(f" {loja_nome[0]}")
+                    title=Text(f" {loja_nome}")
                 ),
             )
 
@@ -74,14 +89,25 @@ class ListaProduto(
                             IconButton(
                                 Icons.EDIT,
                                 tooltip="Editar",
-                                data=loja_nome,
+                                data=(loja_nome, status),
                                 on_click=editar_lista
                             ),
-
+                            IconButton(
+                                icon=icon,
+                                tooltip="Calcular",
+                                selected_icon=Icons.PLAYLIST_REMOVE_OUTLINED,
+                                selected=selected,
+                                style=ButtonStyle(
+                                    color={"selected": "#8B0000",
+                                           "": "#006400"}
+                                ),
+                                on_click=toggle_icon_button,
+                                data=(loja_nome, status)
+                            ),
                             IconButton(
                                 Icons.DELETE,
                                 tooltip="Deletar",
-                                data=loja_nome,
+                                data=(loja_nome, status),
                                 on_click=remover_lista
                             ),
                         ],
@@ -119,7 +145,7 @@ class ListaProduto(
                     Pagina.PAGE.floating_action_button.visible = True
                     Pagina.PAGE.update()
 
-        self.list_view_pd = ListView(
+        self.list_view = ListView(
             expand=True,
             spacing=10,
             padding=10,
@@ -127,17 +153,17 @@ class ListaProduto(
             on_scroll=handle_scroll,
         )
 
-        Pagina.PAGE.add(self.list_view_pd)
+        Pagina.PAGE.add(self.list_view)
 
     ##############################################
     # butao mais
 
-    def pd_criar_button_lista(self):
+    def lj_criar_button_lista(self):
         from front_exe import Pagina
 
         def salvar_banco(e):
 
-            self.dialogo_produto()
+            self.dialogo()
 
         Pagina.PAGE.floating_action_button = FloatingActionButton(
             icon=Icons.ADD,
@@ -150,26 +176,24 @@ class ListaProduto(
     #################################################
     # class
 
-    def pd_criar_pagina(self):
+    def lj_criar_pagina(self):
 
         from front_exe import Pagina
 
-        self.textfilder_filtro_produto()
-        # Supondo que varlist_loja é uma lista de tuplas [(loja_nome, status), ...]
-        varlist_loja = self.lista_produto_sqlite_produto()  # Obtém os dados da tabela
-
-        self.pd_criar_panellist(varlist_loja)
-        self.pd_criar_button_lista()
-
+        self.textfilder_filtro()
+        self.lj_criar_panellist(
+            self.lista_loja_sqlite()
+        )
+        self.lj_criar_button_lista()
         Pagina.PAGE.update()
 
-    def pd_remover_pagina(self):
+    def lj_remover_pagina(self):
 
         from front_exe import Pagina
 
-        Pagina.PAGE.remove(self.textfield_pd)
+        Pagina.PAGE.remove(self.textfield)
         Pagina.PAGE.floating_action_button = None
 
-        Pagina.PAGE.remove(self.list_view_pd)
+        Pagina.PAGE.remove(self.list_view)
 
         Pagina.PAGE.update()

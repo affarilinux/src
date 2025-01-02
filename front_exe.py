@@ -2,10 +2,10 @@ from flet import (NavigationDrawer, NavigationDrawerDestination, Container, Icon
                   Icon, Divider)
 
 
-from front_end.home import Home
-from front_end.configuracoes.configuracoes import Configuracoes
+from front_home.home import Home
+from front_configuracao.configuracoes.configuracoes import Configuracoes
 from front_end.appbar import AppBar
-from front_end.entrada.lista_entrada import Listaentrada
+from front_entrada.entrada.lista_entrada import Listaentrada
 
 
 class Pagina:

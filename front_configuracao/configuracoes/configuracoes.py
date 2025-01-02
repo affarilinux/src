@@ -1,10 +1,10 @@
 from flet import icons, FilledButton, Row, Column
 
-from front_end.loja.LOJA import Loja
-from front_end.produto.lista_produto import ListaProduto
+from front_configuracao.loja.LOJA import Loja
+from front_configuracao.produto.lista_produto import ListaProduto
 
-from front_end.configuracoes.configuracoes_loja import Configuracoesloja
-from front_end.configuracoes.configuracoes_produto import ConfiguracoesProduto
+from front_configuracao.configuracoes.configuracoes_loja import Configuracoesloja
+from front_configuracao.configuracoes.configuracoes_produto import ConfiguracoesProduto
 
 
 class Configuracoes(
