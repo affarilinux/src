@@ -1,10 +1,10 @@
 
-from flet import ( Text, TextField, TextButton,
+from flet import (Text, TextField, TextButton,
                   AlertDialog, Text
                   )
 
 
-class DialogMais:
+class DialogMaisentrada:
 
     def dialogo_entrada(self):
 

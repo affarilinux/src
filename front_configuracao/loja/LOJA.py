@@ -4,7 +4,7 @@ from flet import (FloatingActionButton, Icons, ListView, ExpansionPanel,
                   ExpansionPanelList, Colors, ButtonStyle, TextField
                   )
 
-from banco_sqlite.loja import LojaDB
+from front_configuracao.loja.db.loja import LojaDB
 
 from front_configuracao.loja.dialog_mais import DialogMais
 from front_configuracao.loja.editar_nome import EditarNome

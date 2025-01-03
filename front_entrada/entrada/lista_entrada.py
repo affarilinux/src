@@ -1,20 +1,30 @@
 from flet import (FloatingActionButton, Icons, ListView, ExpansionPanel,
                   ListTile, Text, Column, Row, IconButton, Icons,
-                  ExpansionPanelList, Colors, TextField, FontWeight, AutoComplete
+                  ExpansionPanelList, Colors, TextField, DataTable,
+                  DataColumn
                   )
-
 import flet as ft
-from banco_sqlite.entrada import EntradaDB
+from front_entrada.entrada.db.entrada import EntradaDB
+from front_entrada.entrada.db.subentrada_lista_entrada import SubEntradaDB
+
 from front_entrada.entrada.menores import Menores
-from front_entrada.entrada.dialog_mais import DialogMais
 from front_entrada.entrada.editar_nome import EditarNome
+
+from front_entrada.entrada.dialog_mais_entrada import DialogMaisentrada
+from front_entrada.entrada.dialog_lista_subentrada import DialogMaisLista
 
 
 class Listaentrada(
-    EntradaDB, Menores, DialogMais, EditarNome,
+    EntradaDB, SubEntradaDB,
+    Menores,  EditarNome,
+    DialogMaisentrada, DialogMaisLista
 
 
 ):
+    def __init__(self):
+        super().__init__()
+
+        SubEntradaDB.__init__(self)
 
     def entry_textfilder_filtro(self):
 
@@ -31,6 +41,61 @@ class Listaentrada(
         )
 
         Pagina.PAGE.add(self.textfield_entry)
+
+    def lista_datatable_produtos(self, loja):
+
+        lista = []
+
+        enter = self.et_selecionar_index_nome(loja[0])
+
+        print(self.subent_query_lista(enter))
+
+        subentradas = self.subent_query_lista(enter)
+
+        # Cria as linhas da tabela dinamicamente
+        for subentrada in subentradas:
+            # Assuma que subentrada contém: (ID_subentrada, sub_nome, quantidade)
+            id_subentrada, sub_nome, quantidade = subentrada
+
+            # Adiciona uma nova linha (DataRow) à lista
+            lista.append(
+                ft.DataRow(
+                    cells=[
+                        ft.DataCell(ft.IconButton(ft.icons.EDIT, tooltip=f"Editar ID {
+                                    id_subentrada}", data=id_subentrada)),
+                        ft.DataCell(ft.Text(sub_nome)),  # Nome do subitem
+                        ft.DataCell(ft.Text(str(quantidade))),  # Quantidade
+                    ]
+                )
+            )
+        """ft.DataRow(
+                cells=[
+                    ft.DataCell(IconButton(
+                        Icons.EDIT, tooltip="Editar", data=loja)),
+                    ft.DataCell(ft.Text("John")),
+                    ft.DataCell(ft.Text("Smith")),
+                    ft.DataCell(ft.Text("43")),
+                ],
+            ),
+            ft.DataRow(
+                cells=[
+                    # Preenchendo a coluna "Editar"
+                    ft.DataCell(IconButton(Icons.EDIT)),
+                    ft.DataCell(ft.Text("Jack")),
+                    ft.DataCell(ft.Text("Brown")),
+                    ft.DataCell(ft.Text("19")),
+                ],
+            ),
+            ft.DataRow(
+                cells=[
+                    ft.DataCell(IconButton(Icons.EDIT)),
+                    ft.DataCell(ft.Text("Alice")),
+                    ft.DataCell(ft.Text("Wong")),
+                    ft.DataCell(ft.Text("25")),
+                ],
+            ),"""
+
+        return lista
 
     def pd_criar_panellist(self, varlist_loja):
 
@@ -67,42 +132,17 @@ class Listaentrada(
 
                         ], ft.MainAxisAlignment.SPACE_BETWEEN),
 
-                        ft.DataTable(
+                        DataTable(
                             columns=[
-                                ft.DataColumn(ft.Text("Editar")),
-                                ft.DataColumn(ft.Text("Nome")),
-                                ft.DataColumn(ft.Text("Característica")),
-                                ft.DataColumn(
-                                    ft.Text("QT/unid"), numeric=True),
+                                DataColumn(Text("Editar")),
+                                DataColumn(Text("Nome")),
+                                DataColumn(Text("Característica")),
+                                DataColumn(
+                                    Text("QT/unid"), numeric=True),
                             ],
-                            rows=[
-                                ft.DataRow(
-                                    cells=[
-                                        ft.DataCell(IconButton(
-                                            Icons.EDIT, tooltip="Editar", data=loja)),
-                                        ft.DataCell(ft.Text("John")),
-                                        ft.DataCell(ft.Text("Smith")),
-                                        ft.DataCell(ft.Text("43")),
-                                    ],
-                                ),
-                                ft.DataRow(
-                                    cells=[
-                                        # Preenchendo a coluna "Editar"
-                                        ft.DataCell(IconButton(Icons.EDIT)),
-                                        ft.DataCell(ft.Text("Jack")),
-                                        ft.DataCell(ft.Text("Brown")),
-                                        ft.DataCell(ft.Text("19")),
-                                    ],
-                                ),
-                                ft.DataRow(
-                                    cells=[
-                                        ft.DataCell(IconButton(Icons.EDIT)),
-                                        ft.DataCell(ft.Text("Alice")),
-                                        ft.DataCell(ft.Text("Wong")),
-                                        ft.DataCell(ft.Text("25")),
-                                    ],
-                                ),
-                            ],
+                            rows=self.lista_datatable_produtos(loja)
+
+
                         )
 
                     ]),

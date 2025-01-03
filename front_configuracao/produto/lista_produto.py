@@ -3,7 +3,7 @@ from flet import (FloatingActionButton, Icons, ListView, ExpansionPanel,
                   ExpansionPanelList, Colors, TextField
                   )
 
-from banco_sqlite.produto import ProdutoDB
+from front_configuracao.produto.db.produto import ProdutoDB
 from front_configuracao.produto.menores import Menores
 from front_configuracao.produto.dialog_mais import DialogMais
 from front_configuracao.produto.editar_nome import EditarNome

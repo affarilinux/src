@@ -57,6 +57,7 @@ class SqliteTabela(BaseSqlite):
 
     def tabela_subentrada(self):
 
+        print(123)
         # banco de dados
         self.ativar_with()
 

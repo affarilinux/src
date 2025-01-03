@@ -6,7 +6,7 @@ from SQLITE.base import BaseSqlite
 class EntradaDB(BaseSqlite):
 
     def __init__(self):
-
+        print(345)
         pd = SqliteTabela()
         pd.tabela_entrada()
 
