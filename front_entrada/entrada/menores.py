@@ -32,9 +32,3 @@ class Menores:
             self.lista_entrada_sqlite()
         )
         Pagina.PAGE.update()
-
-    def camada_2(self, titulo):
-
-        self.entry_remover_pagina()
-
-        self.adic_criar_janela()

@@ -1,7 +1,8 @@
 from flet import (FloatingActionButton, Icons, ListView, ExpansionPanel,
                   ListTile, Text, Column, Row, IconButton, Icons,
                   ExpansionPanelList, Colors, TextField, DataTable,
-                  DataColumn
+                  DataColumn, AutoComplete, AutoCompleteSuggestion,
+                  Container, FilledButton, CupertinoButton, ElevatedButton
                   )
 import flet as ft
 from front_entrada.entrada.db.entrada import EntradaDB
@@ -11,13 +12,13 @@ from front_entrada.entrada.menores import Menores
 from front_entrada.entrada.editar_nome import EditarNome
 
 from front_entrada.entrada.dialog_mais_entrada import DialogMaisentrada
-from front_entrada.entrada.dialog_lista_subentrada import DialogMaisLista
+from front_entrada.entrada.buttonsheet_adiconar import ButtonSheetAdicionar
 
 
 class Listaentrada(
     EntradaDB, SubEntradaDB,
     Menores,  EditarNome,
-    DialogMaisentrada, DialogMaisLista
+    DialogMaisentrada, ButtonSheetAdicionar
 
 
 ):
@@ -42,60 +43,35 @@ class Listaentrada(
 
         Pagina.PAGE.add(self.textfield_entry)
 
-    def lista_datatable_produtos(self, loja):
+    def botoes_lista(self):
 
-        lista = []
+        colu = Column([
 
-        enter = self.et_selecionar_index_nome(loja[0])
-
-        print(self.subent_query_lista(enter))
-
-        subentradas = self.subent_query_lista(enter)
-
-        # Cria as linhas da tabela dinamicamente
-        for subentrada in subentradas:
-            # Assuma que subentrada contém: (ID_subentrada, sub_nome, quantidade)
-            id_subentrada, sub_nome, quantidade = subentrada
-
-            # Adiciona uma nova linha (DataRow) à lista
-            lista.append(
-                ft.DataRow(
-                    cells=[
-                        ft.DataCell(ft.IconButton(ft.icons.EDIT, tooltip=f"Editar ID {
-                                    id_subentrada}", data=id_subentrada)),
-                        ft.DataCell(ft.Text(sub_nome)),  # Nome do subitem
-                        ft.DataCell(ft.Text(str(quantidade))),  # Quantidade
-                    ]
-                )
-            )
-        """ft.DataRow(
-                cells=[
-                    ft.DataCell(IconButton(
-                        Icons.EDIT, tooltip="Editar", data=loja)),
-                    ft.DataCell(ft.Text("John")),
-                    ft.DataCell(ft.Text("Smith")),
-                    ft.DataCell(ft.Text("43")),
-                ],
+            CupertinoButton(
+                content=ft.Text("Filled CupertinoButton \n Filled CupertinoButton \n QT:8",
+                                color=ft.Colors.RED),
+                bgcolor=ft.Colors.PRIMARY,
+                alignment=ft.alignment.top_left,
+                border_radius=ft.border_radius.all(15),
+                opacity_on_click=0.5,
+                on_click=lambda e: print("Filled CupertinoButton clicked!"),
             ),
-            ft.DataRow(
-                cells=[
-                    # Preenchendo a coluna "Editar"
-                    ft.DataCell(IconButton(Icons.EDIT)),
-                    ft.DataCell(ft.Text("Jack")),
-                    ft.DataCell(ft.Text("Brown")),
-                    ft.DataCell(ft.Text("19")),
-                ],
-            ),
-            ft.DataRow(
-                cells=[
-                    ft.DataCell(IconButton(Icons.EDIT)),
-                    ft.DataCell(ft.Text("Alice")),
-                    ft.DataCell(ft.Text("Wong")),
-                    ft.DataCell(ft.Text("25")),
-                ],
-            ),"""
 
-        return lista
+            CupertinoButton(
+                content=ft.Text("Filled CupertinoButton \n Filled CupertinoButton \n QT:8",
+                                color=ft.Colors.RED),
+                bgcolor=ft.Colors.PRIMARY,
+                alignment=ft.alignment.top_left,
+                border_radius=ft.border_radius.all(15),
+                opacity_on_click=0.5,
+                on_click=lambda e: print("Filled CupertinoButton clicked!"),
+            ),
+
+        ],
+            spacing=10
+        )
+
+        return colu
 
     def pd_criar_panellist(self, varlist_loja):
 
@@ -114,47 +90,20 @@ class Listaentrada(
                 bgcolor=colors[i % len(colors)],
                 header=ListTile(title=Text(loja[0])),
                 content=Column([
-                    Column([
-                        Row([
 
-                            IconButton(Icons.EDIT, tooltip="Editar",
-                                       data=loja,  # on_click=editar_lista
-                                       ),
-
-
-
-                            Text("acabamento", expand=True),
-                            Text("registro", expand=True),
-                            Text("24", expand=True),
-
-
-
-
-                        ], ft.MainAxisAlignment.SPACE_BETWEEN),
-
-                        DataTable(
-                            columns=[
-                                DataColumn(Text("Editar")),
-                                DataColumn(Text("Nome")),
-                                DataColumn(Text("Característica")),
-                                DataColumn(
-                                    Text("QT/unid"), numeric=True),
-                            ],
-                            rows=self.lista_datatable_produtos(loja)
-
-
-                        )
-
-                    ]),
+                    self.botoes_lista(),
 
                     Row([
                         IconButton(Icons.EDIT, tooltip="Editar",
                                    data=loja, on_click=editar_lista),
                         IconButton(Icons.DELETE, tooltip="Deletar",
                                    data=loja, on_click=remover_lista),
-                        IconButton(Icons.PLAYLIST_ADD_ROUNDED, tooltip="Lista",
-                                   data=loja,  # on_click=remover_lista
-                                   ),
+                        IconButton(Icons.PLAYLIST_ADD_SHARP, tooltip="Deletar",
+                                   data=loja,
+                                   on_click=lambda e: (self.ativar_item()))
+
+
+
                     ], alignment="start"),
                 ]),
             ) for i, loja in enumerate(varlist_loja)
@@ -197,7 +146,7 @@ class Listaentrada(
 
     #################################################
     # class
-    def entry_criar_pagina(self):
+    def listenter_entry_criar_pagina(self):
 
         from front_exe import Pagina
 
@@ -210,7 +159,7 @@ class Listaentrada(
 
         Pagina.PAGE.update()
 
-    def entry_remover_pagina(self):
+    def listenter_entry_remover_pagina(self):
 
         from front_exe import Pagina
 

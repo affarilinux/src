@@ -120,7 +120,7 @@ class FrontExe:
 
             case 2:
 
-                self.enter.entry_remover_pagina()
+                self.enter.listenter_entry_remover_pagina()
 
         Pagina.PAGE.update()
 
@@ -142,7 +142,7 @@ class FrontExe:
 
             case 2:
 
-                self.enter.entry_criar_pagina()
+                self.enter.listenter_entry_criar_pagina()
 
                 self.appbar_wg.appbar_title("ENTRADA")
 

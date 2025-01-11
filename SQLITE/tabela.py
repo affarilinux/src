@@ -38,6 +38,27 @@ class SqliteTabela(BaseSqlite):
 
         self.withdb.execute(query)
 
+    def tabela_subproduto(self):
+
+        # banco de dados
+        self.ativar_with()
+
+        """   subproduto      """
+
+        query = """CREATE TABLE if not exists subproduto(
+
+            ID_subproduto INTEGER PRIMARY KEY AUTOINCREMENT,
+
+            id_produto INT,
+
+            subnome  TEXT,    -- string
+
+            FOREIGN KEY (id_produto) REFERENCES produto(ID_produto) 
+            ON DELETE CASCADE
+            )"""
+
+        self.withdb.execute(query)
+
     def tabela_entrada(self):
 
         # banco de dados
@@ -57,8 +78,6 @@ class SqliteTabela(BaseSqlite):
 
     def tabela_subentrada(self):
 
-        print(123)
-        # banco de dados
         self.ativar_with()
 
         """   subentrada      """
@@ -67,13 +86,21 @@ class SqliteTabela(BaseSqlite):
 
             ID_subentrada INTEGER PRIMARY KEY AUTOINCREMENT,
 
-            id_nome   INT,
+            id_entrada INT,
 
-            sub_nome  TEXT,    -- string
+            id_produto   INT,
+
+            id_subproduto  TEXT,    
 
             quantidade  INT,
 
-            FOREIGN KEY (id_nome) REFERENCES entrada(ID_entrada) 
+            FOREIGN KEY (id_entrada) REFERENCES entrada(ID_entrada) 
+            ON DELETE CASCADE,
+
+            FOREIGN KEY (id_produto) REFERENCES produto(ID_produto) 
+            ON DELETE CASCADE,
+
+            FOREIGN KEY (id_subproduto) REFERENCES subproduto(ID_subproduto) 
             ON DELETE CASCADE
             
             )"""
