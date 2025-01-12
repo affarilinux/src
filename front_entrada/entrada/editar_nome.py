@@ -32,7 +32,7 @@ class EditarNome:
 
         ]
         self.pd_dialog = AlertDialog(
-            title=Text("Digite o nome:"),
+            title=Text("Atualize o nome:"),
             content=pd_dialog_textfield,  # primaria
             actions=pd_material_actions,  # secundaria
         )

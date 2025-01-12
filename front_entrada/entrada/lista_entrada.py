@@ -98,7 +98,7 @@ class Listaentrada(
                                    data=loja, on_click=editar_lista),
                         IconButton(Icons.DELETE, tooltip="Deletar",
                                    data=loja, on_click=remover_lista),
-                        IconButton(Icons.PLAYLIST_ADD_SHARP, tooltip="Deletar",
+                        IconButton(Icons.PLAYLIST_ADD_SHARP, tooltip="Adicionar",
                                    data=loja,
                                    on_click=lambda e: (self.ativar_item()))
 

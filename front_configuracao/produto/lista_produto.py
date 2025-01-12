@@ -4,14 +4,49 @@ from flet import (FloatingActionButton, Icons, ListView, ExpansionPanel,
                   )
 
 from front_configuracao.produto.db.produto import ProdutoDB
+
 from front_configuracao.produto.menores import Menores
 from front_configuracao.produto.dialog_mais import DialogMais
 from front_configuracao.produto.editar_nome import EditarNome
+from front_configuracao.produto.dialog_subproduto_adicionar import (
+    DialogSubProdutoAdicionar
+)
 
 
 class ListaProduto(
-    ProdutoDB, DialogMais, EditarNome, Menores
+    ProdutoDB, DialogMais, EditarNome, Menores,
+    DialogSubProdutoAdicionar
 ):
+    def lista_subproduto(self, nome_loja):
+
+        var_index = self.pddb_selecionar_subnome_subproduto(
+            self.pddb_selecionar_index_nome(nome_loja))
+
+        linhas = []
+        for subproduto in var_index:
+            linhas.append(
+                Row([
+                    IconButton(
+                        icon=Icons.EDIT,
+                        tooltip="Editar",
+                        data=subproduto,  # Passa o dado do subproduto para edição
+                        # on_click=self.editar_lista  # Adicione a lógica de edição
+                    ),
+                    IconButton(
+                        icon=Icons.DELETE,
+                        tooltip="Deletar",
+                        data=subproduto,  # Passa o dado do subproduto para exclusão
+                        # on_click=self.remover_lista  # Adicione a lógica de remoção
+                    ),
+                    # Exibe o nome do subproduto
+                    Text("{}".format(subproduto)),
+                ])
+            )
+
+        # Cria e retorna a coluna com todas as linhas
+        coluna = Column(controls=linhas)
+        return coluna
+
     def textfilder_filtro_produto(self):
 
         from front_exe import Pagina
@@ -59,6 +94,7 @@ class ListaProduto(
 
         for i, (loja_nome) in enumerate(varlist_loja):
 
+            var_loja = loja_nome[0]
             exp = ExpansionPanel(
                 bgcolor=colors[i % len(colors)],
                 header=ListTile(
@@ -69,6 +105,7 @@ class ListaProduto(
             # Adicionando os botões ao conteúdo do painel
             exp.content = Column(
                 [
+                    self.lista_subproduto(var_loja),
                     Row(
                         [
                             IconButton(
@@ -83,6 +120,14 @@ class ListaProduto(
                                 tooltip="Deletar",
                                 data=loja_nome,
                                 on_click=remover_lista
+                            ),
+
+                            IconButton(
+                                Icons.PLAYLIST_ADD,
+                                tooltip="Subproduto",
+                                data=loja_nome,
+                                on_click=lambda e: self.dialogo_subproduto(
+                                    e.control.data)
                             ),
                         ],
                         alignment="start",

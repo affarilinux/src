@@ -79,3 +79,17 @@ class ProdutoDB(BaseSqlite):
         resultados = self.withdb.fetchall()
 
         return resultados
+
+    """    subproduto    """
+
+    def pddb_selecionar_subnome_subproduto(self, id):
+
+        query = """SELECT subnome FROM subproduto WHERE id_produto = ?"""
+        self.ativar_with()
+
+        self.withdb.execute(query, (id,))
+        resultados_raw = self.withdb.fetchall()
+
+        lista_resultados = [resultado[0] for resultado in resultados_raw]
+
+        return lista_resultados

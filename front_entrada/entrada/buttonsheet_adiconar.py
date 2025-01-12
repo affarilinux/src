@@ -1,4 +1,4 @@
-from flet import (Column, Text, Container, AutoComplete, AutoCompleteSuggestion,
+from flet import (Column, Text, Container, AutoComplete,
                   TextField, FilledButton, BottomSheet, Row)
 
 from front_entrada.entrada.db.subentreda_btsheet_adicionar import (
