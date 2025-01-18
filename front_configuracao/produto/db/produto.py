@@ -8,6 +8,7 @@ class ProdutoDB(BaseSqlite):
 
         pd = SqliteTabela()
         pd.tabela_produto()
+        pd.tabela_subproduto()
 
     # insert
     def pddb_inserir_nome_contagem(self, nome):

@@ -53,23 +53,31 @@ class DialogSubProdutoAdicionar(SubprodutoDialogSubprodutoAdicionar):
 
         if nome != "":
 
-            print(self.subpro_queryrepetido(produtonome, nome))
-            """self.subpro_inserir_nome_subproduto(
-                self.subpro_selecionar_index_nome_produto(produtonome),
-                nome
-            )"""
+            var_status = self.subpro_queryrepetido(produtonome, nome)
 
-            class_menor.snack_bar_floating_button(
-                "{} salvo.".format(nome)
-            )
+            if var_status == False:
 
-            Pagina.PAGE.remove(self.list_view_pd)
-            Pagina.PAGE.update()
+                self.subpro_inserir_nome_subproduto(
+                    self.subpro_selecionar_index_nome_produto(produtonome),
+                    nome
+                )
 
-            self.pd_criar_panellist(
-                self.lista_produto_sqlite_produto()
-            )
-            Pagina.PAGE.update()
+                class_menor.snack_bar_floating_button(
+                    "{} salvo.".format(nome)
+                )
 
-            Pagina.PAGE.close(self.dialog_pd)  # Fecha o diálogo
-            Pagina.PAGE.update()
+                Pagina.PAGE.remove(self.list_view_pd)
+                Pagina.PAGE.update()
+
+                self.pd_criar_panellist(
+                    self.lista_produto_sqlite_produto()
+                )
+                Pagina.PAGE.update()
+
+                Pagina.PAGE.close(self.dialog_pd)  # Fecha o diálogo
+                Pagina.PAGE.update()
+
+            elif var_status == True:
+
+                class_menor.snack_bar_floating_button(
+                    "escreva outro nome: {}".format(nome))

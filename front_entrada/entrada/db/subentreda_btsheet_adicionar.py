@@ -56,10 +56,11 @@ class SubEntradaBtsheetAdicionarDB(SqliteTabela, BaseSqlite):
         resultados_raw = self.withdb.fetchall()
 
         # Transforma os resultados no formato AutoCompleteSuggestion
-        produto_sugestoes = [
+        """produto_sugestoes = [
             AutoCompleteSuggestion(key=resultado[0], value=resultado[0])
             for i, resultado in enumerate(resultados_raw)
-        ]
+        ]"""
 
+        lista_resultados = [resultado[0] for resultado in resultados_raw]
         # Retorna a lista
-        return produto_sugestoes
+        return lista_resultados

@@ -11,11 +11,14 @@ from front_configuracao.produto.editar_nome import EditarNome
 from front_configuracao.produto.dialog_subproduto_adicionar import (
     DialogSubProdutoAdicionar
 )
+from front_configuracao.produto.dialog_subproduto_editar import (
+    DialogSubProdutoEditar
+)
 
 
 class ListaProduto(
     ProdutoDB, DialogMais, EditarNome, Menores,
-    DialogSubProdutoAdicionar
+    DialogSubProdutoAdicionar, DialogSubProdutoEditar
 ):
     def lista_subproduto(self, nome_loja):
 
@@ -30,14 +33,10 @@ class ListaProduto(
                         icon=Icons.EDIT,
                         tooltip="Editar",
                         data=subproduto,  # Passa o dado do subproduto para edição
-                        # on_click=self.editar_lista  # Adicione a lógica de edição
+                        on_click=lambda e: self.dialogo_subproduto_editar(
+                            nome_loja, e.control.data)
                     ),
-                    IconButton(
-                        icon=Icons.DELETE,
-                        tooltip="Deletar",
-                        data=subproduto,  # Passa o dado do subproduto para exclusão
-                        # on_click=self.remover_lista  # Adicione a lógica de remoção
-                    ),
+
                     # Exibe o nome do subproduto
                     Text("{}".format(subproduto)),
                 ])

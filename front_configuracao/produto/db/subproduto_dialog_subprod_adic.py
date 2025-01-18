@@ -8,6 +8,7 @@ class SubprodutoDialogSubprodutoAdicionar(BaseSqlite):
 
         subprod = SqliteTabela()
         subprod.tabela_produto()
+        subprod.tabela_subproduto()
 
     """   
         produto    
