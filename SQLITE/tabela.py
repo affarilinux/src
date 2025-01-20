@@ -90,7 +90,7 @@ class SqliteTabela(BaseSqlite):
 
             id_produto   INT,
 
-            id_subproduto  TEXT,    
+            id_subproduto  INT,    
 
             quantidade  INT,
 

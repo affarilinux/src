@@ -1,10 +1,9 @@
 from flet import (FloatingActionButton, Icons, ListView, ExpansionPanel,
                   ListTile, Text, Column, Row, IconButton, Icons,
-                  ExpansionPanelList, Colors, TextField, DataTable,
-                  DataColumn, AutoComplete, AutoCompleteSuggestion,
-                  Container, FilledButton, CupertinoButton, ElevatedButton
+                  ExpansionPanelList, Colors, TextField, CupertinoButton,
+                  alignment, border_radius
+
                   )
-import flet as ft
 from front_entrada.entrada.db.entrada import EntradaDB
 from front_entrada.entrada.db.subentrada_lista_entrada import SubEntradaDB
 
@@ -13,12 +12,13 @@ from front_entrada.entrada.editar_nome import EditarNome
 
 from front_entrada.entrada.dialog_mais_entrada import DialogMaisentrada
 from front_entrada.entrada.buttonsheet_adiconar import ButtonSheetAdicionar
+from front_entrada.entrada.buttonsheet_editar_apagar import ButtonSheetEditar
 
 
 class Listaentrada(
     EntradaDB, SubEntradaDB,
     Menores,  EditarNome,
-    DialogMaisentrada, ButtonSheetAdicionar
+    DialogMaisentrada, ButtonSheetAdicionar, ButtonSheetEditar
 
 
 ):
@@ -43,32 +43,46 @@ class Listaentrada(
 
         Pagina.PAGE.add(self.textfield_entry)
 
-    def botoes_lista(self):
+    def botoes_cupetino(
+            self, e, nome_produto, nome_subproduto, quantidade):
 
-        colu = Column([
+        # Chama diretamente o construtor
+        ButtonSheetEditar.lista_if["produto"] = nome_produto
 
+        ButtonSheetEditar.lista_if["subproduto"] = nome_subproduto
+        ButtonSheetEditar.lista_if["quantidade"] = quantidade
+
+        print(ButtonSheetEditar.lista_if)
+
+        self.ativar_item_editar(nome_produto)
+
+    def botoes_lista(self, loja):
+
+        resultados = self.sheadic_select_query_tripla(loja[0])
+
+        # Cria uma lista de CupertinoButton dinamicamente com base nos resultados
+        botoes = [
             CupertinoButton(
-                content=ft.Text("Filled CupertinoButton \n Filled CupertinoButton \n QT:8",
-                                color=ft.Colors.RED),
-                bgcolor=ft.Colors.PRIMARY,
-                alignment=ft.alignment.top_left,
-                border_radius=ft.border_radius.all(15),
+                content=Text(
+                    f"{nome_produto} \n {nome_subproduto} \n QT:{quantidade}",
+                    color=Colors.RED,
+                ),
+                bgcolor=Colors.PRIMARY,
+                alignment=alignment.top_left,
+                border_radius=border_radius.all(15),
                 opacity_on_click=0.5,
-                on_click=lambda e: print("Filled CupertinoButton clicked!"),
-            ),
+                # Captura os valores atuais no loop com argumentos padrão na lambda
+                on_click=lambda e, np=nome_produto, ns=nome_subproduto, qt=quantidade: (
+                    self.botoes_cupetino(e, np, ns, qt)
+                )
+            )
+            for nome_produto, nome_subproduto, quantidade in resultados
+        ]
 
-            CupertinoButton(
-                content=ft.Text("Filled CupertinoButton \n Filled CupertinoButton \n QT:8",
-                                color=ft.Colors.RED),
-                bgcolor=ft.Colors.PRIMARY,
-                alignment=ft.alignment.top_left,
-                border_radius=ft.border_radius.all(15),
-                opacity_on_click=0.5,
-                on_click=lambda e: print("Filled CupertinoButton clicked!"),
-            ),
-
-        ],
-            spacing=10
+        # Retorna a coluna com os botões criados
+        colu = Column(
+            botoes,
+            spacing=10,
         )
 
         return colu
@@ -91,7 +105,7 @@ class Listaentrada(
                 header=ListTile(title=Text(loja[0])),
                 content=Column([
 
-                    self.botoes_lista(),
+                    self.botoes_lista(loja),
 
                     Row([
                         IconButton(Icons.EDIT, tooltip="Editar",
@@ -100,7 +114,10 @@ class Listaentrada(
                                    data=loja, on_click=remover_lista),
                         IconButton(Icons.PLAYLIST_ADD_SHARP, tooltip="Adicionar",
                                    data=loja,
-                                   on_click=lambda e: (self.ativar_item()))
+                                   on_click=lambda e: (
+                                       ButtonSheetAdicionar.__init__(self),
+                                       self.ativar_item(e.control.data))
+                                   )
 
 
 

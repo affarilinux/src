@@ -1,13 +1,14 @@
 
-from flet import (Column, Text, Container, AutoComplete,
+from flet import (Column, Container,
                   TextField, FilledButton, BottomSheet, Row,
-                  Dropdown, dropdown, Ref)
+                  Dropdown, Ref)
 
 from front_entrada.entrada.db.subentreda_btsheet_adicionar import (
     SubEntradaBtsheetAdicionarDB)
+from front_entrada.entrada.db.bs_editar_apagar import (dbBSEditar)
 
 
-class ButtonSheetAdicionar(SubEntradaBtsheetAdicionarDB):
+class ButtonSheetEditar(SubEntradaBtsheetAdicionarDB, dbBSEditar):
 
     lista_subproduto = []
     dropdown_ref = Ref[Dropdown]()  # Adiciona uma referência ao Dropdown
@@ -16,35 +17,44 @@ class ButtonSheetAdicionar(SubEntradaBtsheetAdicionarDB):
         "produto": "", "subproduto": "", "quantidade": ""
     }
 
-    def __init__(self):
-        super().__init__()
+    def atualizar_subprodutos_editar(self):
 
-        self.limpar_lista_classe()
-
-    def atualizar_subprodutos(self, produto, selecao):
         from front_exe import Pagina
 
+        print(self.bse_select_query_lista(
+            ButtonSheetEditar.lista_if["produto"]
+        ))
+
+        self.dropdown_ref.current.options = self.bse_select_query_lista(
+            ButtonSheetEditar.lista_if["produto"]
+        )
+
+        self.dropdown_ref.current.update()  # Força a atualização do Dropdown
+
+        Pagina.PAGE.update()
+        """from front_exe import Pagina
+
         # Atualiza a lista de subprodutos
-        ButtonSheetAdicionar.lista_subproduto = (
+        ButtonSheetEditar.lista_subproduto = (
             self.sheadic_select_listaquery_subentrada(produto)
         )
 
         # Cria as opções do Dropdown a partir da lista de strings
         self.dropdown_ref.current.options = [
-            dropdown.Option(key=item, text=item) for item in ButtonSheetAdicionar.lista_subproduto
+            dropdown.Option(key=item, text=item) for item in ButtonSheetEditar.lista_subproduto
         ]
         self.dropdown_ref.current.update()  # Força a atualização do Dropdown
 
-        ButtonSheetAdicionar.lista_if["produto"] = selecao
-        ButtonSheetAdicionar.lista_if["subproduto"] = ""
+        ButtonSheetEditar.lista_if["produto"] = selecao
+        ButtonSheetEditar.lista_if["subproduto"] = ""
 
-        Pagina.PAGE.update()
+        Pagina.PAGE.update()"""
 
     def lista_subproduto_dropdawn(self, value):
 
         if value != "":
 
-            ButtonSheetAdicionar.lista_if["subproduto"] = value
+            ButtonSheetEditar.lista_if["subproduto"] = value
 
     def lista_qt(self, value):
 
@@ -63,7 +73,7 @@ class ButtonSheetAdicionar(SubEntradaBtsheetAdicionarDB):
                         )
                     elif quantidade > 0:
 
-                        ButtonSheetAdicionar.lista_if["quantidade"] = quantidade
+                        ButtonSheetEditar.lista_if["quantidade"] = quantidade
 
                 except ValueError:
 
@@ -73,8 +83,8 @@ class ButtonSheetAdicionar(SubEntradaBtsheetAdicionarDB):
 
     def salvar_historico(self, entrada):
 
-        if ButtonSheetAdicionar.lista_if["produto"] == "" or (
-            ButtonSheetAdicionar.lista_if["quantidade"] == ""
+        if ButtonSheetEditar.lista_if["produto"] == "" or (
+            ButtonSheetEditar.lista_if["quantidade"] == ""
         ):
 
             from front_end.menor import Menor
@@ -85,15 +95,15 @@ class ButtonSheetAdicionar(SubEntradaBtsheetAdicionarDB):
                 "adicione o produto e quantidade"
             )
 
-        elif ButtonSheetAdicionar.lista_if["produto"] != "" and (
-            ButtonSheetAdicionar.lista_if["quantidade"] != ""
+        elif ButtonSheetEditar.lista_if["produto"] != "" and (
+            ButtonSheetEditar.lista_if["quantidade"] != ""
         ):
 
             self.sheadic_insert_query_tripla(
                 entrada,
-                ButtonSheetAdicionar.lista_if["produto"],
-                ButtonSheetAdicionar.lista_if["subproduto"],
-                ButtonSheetAdicionar.lista_if["quantidade"]
+                ButtonSheetEditar.lista_if["produto"],
+                ButtonSheetEditar.lista_if["subproduto"],
+                ButtonSheetEditar.lista_if["quantidade"]
             )
             self.limpar_lista_classe()
 
@@ -102,26 +112,10 @@ class ButtonSheetAdicionar(SubEntradaBtsheetAdicionarDB):
                 self.bs.open = False
                 Pagina.PAGE.update()
 
-    def adicionar_itens_lista(self, data):
+    def adicionar_itens_lista_editar(self, data):
         return Column(
             controls=[
-                Column(
-                    controls=[
-                        Text(value="Produto:", size=16),
-                        Container(
-                            content=AutoComplete(
-                                suggestions=self.sheadic_select_lista_entrada(),
-                                on_select=lambda e: self.atualizar_subprodutos(
-                                    e.control.suggestions[e.control.selected_index].key,
-                                    e.control.suggestions[e.control.selected_index].value
-                                ),
 
-
-                            ),
-                            expand=True,
-                        ),
-                    ]
-                ),
                 Column(
                     controls=[
                         Dropdown(
@@ -157,7 +151,7 @@ class ButtonSheetAdicionar(SubEntradaBtsheetAdicionarDB):
             self.bs.open = False
             Pagina.PAGE.update()
 
-    def ativar_item(self, data):
+    def ativar_item_editar(self, data):
         from front_exe import Pagina
 
         self.bs = BottomSheet(
@@ -166,16 +160,20 @@ class ButtonSheetAdicionar(SubEntradaBtsheetAdicionarDB):
                 padding=20,
                 content=Column(
                     controls=[
-                        self.adicionar_itens_lista(data[0]),
+                        self.adicionar_itens_lista_editar(data[0]),
                     ]
                 ),
             ),
         )
         Pagina.PAGE.overlay.append(self.bs)
+
         Pagina.PAGE.update()
+
+        # fazer o update depois atualizar dropdawn
+        self.atualizar_subprodutos_editar()
 
     def limpar_lista_classe(self):
 
-        ButtonSheetAdicionar.lista_if["produto"] = ""
-        ButtonSheetAdicionar.lista_if["subproduto"] = ""
-        ButtonSheetAdicionar.lista_if["quantidade"] = ""
+        ButtonSheetEditar.lista_if["produto"] = ""
+        ButtonSheetEditar.lista_if["subproduto"] = ""
+        ButtonSheetEditar.lista_if["quantidade"] = ""
