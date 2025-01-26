@@ -15,9 +15,6 @@ class dbBSEditar(BaseSqlite):
         sub_btshhet.tabela_produto()
         sub_btshhet.tabela_subproduto()
 
-    """
-        query mista
-    """
     # select
 
     def bse_select_query_lista(self, produto):
@@ -40,3 +37,15 @@ class dbBSEditar(BaseSqlite):
         lista_resultados = [resultado[0] for resultado in resultados_raw]
         # Retorna a lista
         return lista_resultados
+
+    # update
+
+    def bse_update_subentrada_quantidade(
+            self, entrada, produto, subproduto, quantidade):
+
+        querymista = """
+        UPDATE subentrada
+
+        SET quantidade = ?
+        WHERE
+"""

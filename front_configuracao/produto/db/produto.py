@@ -81,7 +81,10 @@ class ProdutoDB(BaseSqlite):
 
         return resultados
 
-    """    subproduto    """
+    """    
+        subproduto    
+    """
+    # select
 
     def pddb_selecionar_subnome_subproduto(self, id):
 
@@ -94,3 +97,5 @@ class ProdutoDB(BaseSqlite):
         lista_resultados = [resultado[0] for resultado in resultados_raw]
 
         return lista_resultados
+
+    

@@ -57,6 +57,7 @@ class SubEntradaBtsheetAdicionarDB(SqliteTabela, BaseSqlite):
         WHERE p.nome = ?
         """
 
+        self.ativar_with()
         # Executa a consulta
         self.withdb.execute(query, (produto,))
 
@@ -82,7 +83,7 @@ class SubEntradaBtsheetAdicionarDB(SqliteTabela, BaseSqlite):
             entrada et ON se.id_entrada = et.ID_entrada
         INNER JOIN
             produto p ON se.id_produto = p.ID_produto
-        INNER JOIN
+        LEFT JOIN
             subproduto sp ON se.id_subproduto = sp.ID_subproduto
         WHERE
             et.nome = ?
@@ -92,10 +93,76 @@ class SubEntradaBtsheetAdicionarDB(SqliteTabela, BaseSqlite):
         # Recupera os subprodutos
         resultados_raw = self.withdb.fetchall()
 
-        lista_resultados = [(row[0], row[1], row[2]) for row in resultados_raw]
+        # lista_resultados = [(row[0], row[1], row[2]) for row in resultados_raw]
+        lista_resultados = [
+            (row[0], row[1] if row[1] is not None else "*S/subproduto", row[2])
+            for row in resultados_raw
+        ]
 
         return lista_resultados
 
+    def sheadic_select_query_dupla__len_subp(self, entrada, produto,
+                                             subproduto):
+
+        self.ativar_with()
+
+        querymista = """
+        SELECT
+            p.nome, sp.subnome
+        FROM
+            subentrada se
+        INNER JOIN
+            entrada et ON se.id_entrada = et.ID_entrada
+        INNER JOIN
+            produto p ON se.id_produto = p.ID_produto
+        LEFT JOIN
+            subproduto sp ON se.id_subproduto = sp.ID_subproduto
+        WHERE
+            et.nome = ? AND p.nome = ? AND sp.subnome = ?
+        """
+
+        self.withdb.execute(
+            querymista, (entrada, produto, subproduto))
+
+        resultados_raw = self.withdb.fetchall()
+
+        """lista_resultados = [
+            (row[0], row[1] if row[1] is not None else "*S/subproduto")
+            for row in resultados_raw
+        ]"""
+        lista_resultados = [(row[0], row[1]) for row in resultados_raw]
+        return lista_resultados
+
+    def sheadic_select_query_dupla__len_s_subp(self, entrada, produto):
+
+        self.ativar_with()
+
+        querymista = """
+        SELECT
+            p.nome
+        FROM
+            subentrada se
+        INNER JOIN
+            entrada et ON se.id_entrada = et.ID_entrada
+        INNER JOIN
+            produto p ON se.id_produto = p.ID_produto
+        LEFT JOIN
+            subproduto sp ON se.id_subproduto = sp.ID_subproduto
+        WHERE
+            et.nome = ? AND p.nome = ?
+        """
+
+        self.withdb.execute(
+            querymista, (entrada, produto))
+
+        resultados_raw = self.withdb.fetchall()
+
+        """lista_resultados = [
+            (row[0], row[1] if row[1] is not None else "*S/subproduto")
+            for row in resultados_raw
+        ]"""
+        lista_resultados = [(row[0]) for row in resultados_raw]
+        return lista_resultados
     # insert
 
     def sheadic_insert_query_tripla(

@@ -9,10 +9,10 @@ from front_entrada.entrada.db.subentreda_btsheet_adicionar import (
 
 class ButtonSheetAdicionar(SubEntradaBtsheetAdicionarDB):
 
-    lista_subproduto = []
-    dropdown_ref = Ref[Dropdown]()  # Adiciona uma referência ao Dropdown
+    lista_subproduto_adic = []
+    dropdown_ref_adic = Ref[Dropdown]()  # Adiciona uma referência ao Dropdown
 
-    lista_if = {
+    lista_if_adic = {
         "produto": "", "subproduto": "", "quantidade": ""
     }
 
@@ -25,26 +25,26 @@ class ButtonSheetAdicionar(SubEntradaBtsheetAdicionarDB):
         from front_exe import Pagina
 
         # Atualiza a lista de subprodutos
-        ButtonSheetAdicionar.lista_subproduto = (
+        ButtonSheetAdicionar.lista_subproduto_adic = (
             self.sheadic_select_listaquery_subentrada(produto)
         )
 
         # Cria as opções do Dropdown a partir da lista de strings
-        self.dropdown_ref.current.options = [
-            dropdown.Option(key=item, text=item) for item in ButtonSheetAdicionar.lista_subproduto
+        self.dropdown_ref_adic.current.options = [
+            dropdown.Option(key=item, text=item) for item in ButtonSheetAdicionar.lista_subproduto_adic
         ]
-        self.dropdown_ref.current.update()  # Força a atualização do Dropdown
+        self.dropdown_ref_adic.current.update()  # Força a atualização do Dropdown
 
-        ButtonSheetAdicionar.lista_if["produto"] = selecao
-        ButtonSheetAdicionar.lista_if["subproduto"] = ""
+        ButtonSheetAdicionar.lista_if_adic["produto"] = selecao
+        ButtonSheetAdicionar.lista_if_adic["subproduto"] = ""
 
         Pagina.PAGE.update()
 
-    def lista_subproduto_dropdawn(self, value):
+    def lista_subproduto_adic_dropdawn(self, value):
 
         if value != "":
 
-            ButtonSheetAdicionar.lista_if["subproduto"] = value
+            ButtonSheetAdicionar.lista_if_adic["subproduto"] = value
 
     def lista_qt(self, value):
 
@@ -63,7 +63,7 @@ class ButtonSheetAdicionar(SubEntradaBtsheetAdicionarDB):
                         )
                     elif quantidade > 0:
 
-                        ButtonSheetAdicionar.lista_if["quantidade"] = quantidade
+                        ButtonSheetAdicionar.lista_if_adic["quantidade"] = quantidade
 
                 except ValueError:
 
@@ -73,34 +73,88 @@ class ButtonSheetAdicionar(SubEntradaBtsheetAdicionarDB):
 
     def salvar_historico(self, entrada):
 
-        if ButtonSheetAdicionar.lista_if["produto"] == "" or (
-            ButtonSheetAdicionar.lista_if["quantidade"] == ""
+        from front_end.menor import Menor
+        from front_exe import Pagina
+
+        class_menor_1 = Menor()
+
+        if ButtonSheetAdicionar.lista_if_adic["produto"] == "" or (
+            ButtonSheetAdicionar.lista_if_adic["quantidade"] == ""
         ):
-
-            from front_end.menor import Menor
-
-            class_menor_1 = Menor()
 
             class_menor_1.snack_bar_floating_button(
                 "adicione o produto e quantidade"
             )
 
-        elif ButtonSheetAdicionar.lista_if["produto"] != "" and (
-            ButtonSheetAdicionar.lista_if["quantidade"] != ""
+        elif ButtonSheetAdicionar.lista_if_adic["produto"] != "" and (
+            ButtonSheetAdicionar.lista_if_adic["quantidade"] != ""
         ):
 
-            self.sheadic_insert_query_tripla(
-                entrada,
-                ButtonSheetAdicionar.lista_if["produto"],
-                ButtonSheetAdicionar.lista_if["subproduto"],
-                ButtonSheetAdicionar.lista_if["quantidade"]
-            )
-            self.limpar_lista_classe()
+            if ButtonSheetAdicionar.lista_if_adic["subproduto"] != "":
 
-            from front_exe import Pagina
-            if self.bs:
-                self.bs.open = False
-                Pagina.PAGE.update()
+                var_len = self.sheadic_select_query_dupla__len_subp(
+                    entrada,
+                    ButtonSheetAdicionar.lista_if_adic["produto"],
+                    ButtonSheetAdicionar.lista_if_adic["subproduto"]
+
+                )
+
+                if len(var_len) == 0:
+
+                    self.sheadic_insert_query_tripla(
+                        entrada,
+                        ButtonSheetAdicionar.lista_if_adic["produto"],
+                        ButtonSheetAdicionar.lista_if_adic["subproduto"],
+                        ButtonSheetAdicionar.lista_if_adic["quantidade"]
+                    )
+
+                    self.limpar_lista_classe()
+
+                    if self.bs:
+                        self.bs.open = False
+                        Pagina.PAGE.update()
+
+                elif len(var_len) > 0:
+
+                    class_menor_1.snack_bar_floating_button(
+                        "Está na lista."
+                    )
+            elif ButtonSheetAdicionar.lista_if_adic["subproduto"] == "":
+
+                var_lista = self.sheadic_select_listaquery_subentrada(
+                    ButtonSheetAdicionar.lista_if_adic["produto"]
+                )
+                if len(var_lista) == 0:
+
+                    var_len_1 = self.sheadic_select_query_dupla__len_s_subp(
+                        entrada,
+                        ButtonSheetAdicionar.lista_if_adic["produto"]
+
+                    )
+                    if len(var_len_1) == 0:
+                        self.sheadic_insert_query_tripla(
+                            entrada,
+                            ButtonSheetAdicionar.lista_if_adic["produto"],
+                            ButtonSheetAdicionar.lista_if_adic["subproduto"],
+                            ButtonSheetAdicionar.lista_if_adic["quantidade"]
+                        )
+
+                        self.limpar_lista_classe()
+
+                        if self.bs:
+                            self.bs.open = False
+                            Pagina.PAGE.update()
+
+                    elif len(var_len_1) > 0:
+
+                        class_menor_1.snack_bar_floating_button(
+                            "Está na lista."
+                        )
+                elif len(var_lista) != 0:
+
+                    class_menor_1.snack_bar_floating_button(
+                        "Subproduto não adicionado."
+                    )
 
     def adicionar_itens_lista(self, data):
         return Column(
@@ -125,10 +179,10 @@ class ButtonSheetAdicionar(SubEntradaBtsheetAdicionarDB):
                 Column(
                     controls=[
                         Dropdown(
-                            ref=self.dropdown_ref,  # Associa a referência ao Dropdown
+                            ref=self.dropdown_ref_adic,  # Associa a referência ao Dropdown
                             expand=True,
                             options=[],
-                            on_change=lambda e: self.lista_subproduto_dropdawn(
+                            on_change=lambda e: self.lista_subproduto_adic_dropdawn(
                                 e.control.value)
                         )
                     ]
@@ -176,6 +230,6 @@ class ButtonSheetAdicionar(SubEntradaBtsheetAdicionarDB):
 
     def limpar_lista_classe(self):
 
-        ButtonSheetAdicionar.lista_if["produto"] = ""
-        ButtonSheetAdicionar.lista_if["subproduto"] = ""
-        ButtonSheetAdicionar.lista_if["quantidade"] = ""
+        ButtonSheetAdicionar.lista_if_adic["produto"] = ""
+        ButtonSheetAdicionar.lista_if_adic["subproduto"] = ""
+        ButtonSheetAdicionar.lista_if_adic["quantidade"] = ""

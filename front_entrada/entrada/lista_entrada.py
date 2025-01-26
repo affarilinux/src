@@ -47,12 +47,10 @@ class Listaentrada(
             self, e, nome_produto, nome_subproduto, quantidade):
 
         # Chama diretamente o construtor
-        ButtonSheetEditar.lista_if["produto"] = nome_produto
+        ButtonSheetEditar.lista_if_edit["produto"] = nome_produto
 
-        ButtonSheetEditar.lista_if["subproduto"] = nome_subproduto
-        ButtonSheetEditar.lista_if["quantidade"] = quantidade
-
-        print(ButtonSheetEditar.lista_if)
+        ButtonSheetEditar.lista_if_edit["subproduto"] = nome_subproduto
+        ButtonSheetEditar.lista_if_edit["quantidade"] = quantidade
 
         self.ativar_item_editar(nome_produto)
 
@@ -123,6 +121,7 @@ class Listaentrada(
 
                     ], alignment="start"),
                 ]),
+
             ) for i, loja in enumerate(varlist_loja)
         ]
 
