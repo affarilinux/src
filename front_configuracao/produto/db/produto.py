@@ -98,4 +98,18 @@ class ProdutoDB(BaseSqlite):
 
         return lista_resultados
 
-    
+    def pddb_selecionar_existe_subproduto(self, titulo):
+
+        query = """
+            SELECT id_produto 
+            FROM subproduto 
+            WHERE 
+            id_produto = (SELECT ID_produto FROM produto WHERE nome = ?)"""
+        self.ativar_with()
+
+        self.withdb.execute(query, (titulo,))
+        resultados_raw = self.withdb.fetchall()
+
+        lista_resultados = [resultado[0] for resultado in resultados_raw]
+
+        return lista_resultados

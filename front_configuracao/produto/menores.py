@@ -21,13 +21,25 @@ class Menores:
     def remover_nome_produto(self, titulo):
 
         from front_exe import Pagina
+        from front_end.menor import Menor
 
-        self.pddb_remover_nome_loja(titulo)
+        class_menor = Menor()
 
-        Pagina.PAGE.remove(self.list_view_pd)
-        Pagina.PAGE.update()
+        var_existe_produto = self.pddb_selecionar_existe_subproduto(titulo)
 
-        self.pd_criar_panellist(
-            self.lista_produto_sqlite_produto()
-        )
-        Pagina.PAGE.update()
+        if len(var_existe_produto) == 0:
+            self.pddb_remover_nome_loja(titulo)
+
+            Pagina.PAGE.remove(self.list_view_pd)
+            Pagina.PAGE.update()
+
+            self.pd_criar_panellist(
+                self.lista_produto_sqlite_produto()
+            )
+            Pagina.PAGE.update()
+
+        elif len(var_existe_produto) > 0:
+
+            class_menor.snack_bar_floating_button(
+                "Possui itens na lista {}.".format(titulo)
+            )

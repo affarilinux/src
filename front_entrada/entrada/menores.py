@@ -23,12 +23,25 @@ class Menores:
 
         from front_exe import Pagina
 
-        self.et_remover_nome(titulo)
+        var_existe = self.et_select_existe_subentrada(titulo)
 
-        Pagina.PAGE.remove(self.list_view_ent)
-        Pagina.PAGE.update()
+        if len(var_existe) == 0:
 
-        self.pd_criar_panellist(
-            self.lista_entrada_sqlite()
-        )
-        Pagina.PAGE.update()
+            self.et_remover_nome(titulo)
+
+            Pagina.PAGE.remove(self.list_view_ent)
+            Pagina.PAGE.update()
+
+            self.pd_criar_panellist(
+                self.lista_entrada_sqlite()
+            )
+            Pagina.PAGE.update()
+
+        elif len(var_existe) > 0:
+
+            from front_end.menor import Menor
+
+            class_menor = Menor()
+
+            class_menor.snack_bar_floating_button(
+                "Possui itens na lista {}.".format(titulo))

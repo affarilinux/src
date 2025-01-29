@@ -72,12 +72,7 @@ class ListaProduto(
             # Chama a função com o índice correto
             self.dialogo_editar_produto(titulo[0])
 
-        def remover_lista(e):
-
-            titulo_1 = e.control.data  # Recupera o índice armazenado no botão
-
-            self.remover_nome_produto(titulo_1[0])
-
+       
         # Lista de cores para os painéis
         colors = [
             "#008000",  # Green
@@ -118,12 +113,13 @@ class ListaProduto(
                                 Icons.DELETE,
                                 tooltip="Deletar",
                                 data=loja_nome,
-                                on_click=remover_lista
+                                on_click=lambda e: self.remover_nome_produto(
+                                    e.control.data[0])
                             ),
 
                             IconButton(
                                 Icons.PLAYLIST_ADD,
-                                tooltip="Subproduto",
+                                tooltip="Adicionar",
                                 data=loja_nome,
                                 on_click=lambda e: self.dialogo_subproduto(
                                     e.control.data)

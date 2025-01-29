@@ -12,13 +12,13 @@ from front_entrada.entrada.editar_nome import EditarNome
 
 from front_entrada.entrada.dialog_mais_entrada import DialogMaisentrada
 from front_entrada.entrada.buttonsheet_adiconar import ButtonSheetAdicionar
-from front_entrada.entrada.buttonsheet_editar_apagar import ButtonSheetEditar
+from front_entrada.entrada.dialog_editar_apagar import DialogEditarApagar
 
 
 class Listaentrada(
     EntradaDB, SubEntradaDB,
     Menores,  EditarNome,
-    DialogMaisentrada, ButtonSheetAdicionar, ButtonSheetEditar
+    DialogMaisentrada, ButtonSheetAdicionar, DialogEditarApagar
 
 
 ):
@@ -44,15 +44,15 @@ class Listaentrada(
         Pagina.PAGE.add(self.textfield_entry)
 
     def botoes_cupetino(
-            self, e, nome_produto, nome_subproduto, quantidade):
+            self, e, loja, nome_produto, nome_subproduto, quantidade):
+        DialogEditarApagar.lista_if_edit["entrada"] = loja
+        DialogEditarApagar.lista_if_edit["produto"] = nome_produto
+        DialogEditarApagar.lista_if_edit["subproduto"] = nome_subproduto
+        DialogEditarApagar.lista_if_edit["quantidade"] = quantidade
 
         # Chama diretamente o construtor
-        ButtonSheetEditar.lista_if_edit["produto"] = nome_produto
 
-        ButtonSheetEditar.lista_if_edit["subproduto"] = nome_subproduto
-        ButtonSheetEditar.lista_if_edit["quantidade"] = quantidade
-
-        self.ativar_item_editar(nome_produto)
+        self.dialogo_subentrada()
 
     def botoes_lista(self, loja):
 
@@ -71,7 +71,7 @@ class Listaentrada(
                 opacity_on_click=0.5,
                 # Captura os valores atuais no loop com argumentos padrão na lambda
                 on_click=lambda e, np=nome_produto, ns=nome_subproduto, qt=quantidade: (
-                    self.botoes_cupetino(e, np, ns, qt)
+                    self.botoes_cupetino(e, loja[0], np, ns, qt)
                 )
             )
             for nome_produto, nome_subproduto, quantidade in resultados
@@ -92,9 +92,6 @@ class Listaentrada(
         def editar_lista(e):
             self.dialogo_editar_produto(e.control.data[0])
 
-        def remover_lista(e):
-            self.remover_nome_entrada(e.control.data[0])
-
         colors = ["#008000", "#20B2AA", "#708090", "#B8860B", "#4B0082"]
 
         panels = [
@@ -108,8 +105,12 @@ class Listaentrada(
                     Row([
                         IconButton(Icons.EDIT, tooltip="Editar",
                                    data=loja, on_click=editar_lista),
+
                         IconButton(Icons.DELETE, tooltip="Deletar",
-                                   data=loja, on_click=remover_lista),
+                                   data=loja,
+                                   on_click=lambda e: self.remover_nome_entrada(
+                                       e.control.data[0])),
+
                         IconButton(Icons.PLAYLIST_ADD_SHARP, tooltip="Adicionar",
                                    data=loja,
                                    on_click=lambda e: (
@@ -146,7 +147,9 @@ class Listaentrada(
     # butao mais
 
     def pd_criar_button_lista(self):
+
         from front_exe import Pagina
+        
 
         def salvar_banco(e):
 
@@ -162,6 +165,7 @@ class Listaentrada(
 
     #################################################
     # class
+
     def listenter_entry_criar_pagina(self):
 
         from front_exe import Pagina

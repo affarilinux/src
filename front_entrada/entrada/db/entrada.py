@@ -77,3 +77,24 @@ class EntradaDB(BaseSqlite):
         resultados = self.withdb.fetchall()
 
         return resultados
+
+    """
+        subentrada
+    """
+
+    def et_select_existe_subentrada(self, titulo):
+
+        query = """
+            SELECT id_entrada 
+            FROM subentrada 
+            WHERE 
+            id_entrada = (SELECT ID_entrada FROM entrada WHERE nome = ?) """
+        self.ativar_with()
+
+        self.withdb.execute(query, (titulo,))
+        resultados_raw = self.withdb.fetchall()
+
+        # Transforma o resultado em uma lista plana
+        resultados = [row[0] for row in resultados_raw]
+
+        return resultados
